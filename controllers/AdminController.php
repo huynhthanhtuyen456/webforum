@@ -50,15 +50,15 @@ class AdminController extends Controller
         if (!in_array($tab, ['questions', 'modules', 'users', 'contacts'])) throw new BadRequestException("Invalid tab query param!");
 
         $questions = Question::findAll([], $this->getLimit(), $this->getPageOffset());
-        $totalQuestions = Question::countAll();
+        $totalQuestions = Question::countAll([]);
         $totalPageQuestions = ceil($totalQuestions / $this->getLimit());
 
-        $modules = Module::findAll(['isActive' => Module::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
+        $modules = Module::findAll([], $this->getLimit(), $this->getPageOffset());
         $totalModules = Module::countAll();
         $totalPageModules = ceil($totalModules / $this->getLimit());
 
         $users = User::findAll([], $this->getLimit(), $this->getPageOffset());
-        $totalUsers = User::countAll();
+        $totalUsers = User::countAll([]);
         $totalPageUsers = ceil($totalUsers / $this->getLimit());
 
         $contacts = Contact::findAll([], $this->getLimit(), $this->getPageOffset());
@@ -67,15 +67,19 @@ class AdminController extends Controller
 
         return $this->render($view='admin', $params=[
             "questions" => $questions,
+            "totalQuestions" => $totalQuestions,
             "totalPageQuestions" => $totalPageQuestions,
 
             "modules" => $modules,
+            "totalModules" => $totalModules,
             "totalPageModules" => $totalPageModules,
 
             "users" => $users,
+            "totalUsers" => $totalUsers,
             "totalPageUsers" => $totalPageUsers,
 
             "contacts" => $contacts,
+            "totalContacts" => $totalContacts,
             "totalPageContacts" => $totalPageContacts,
 
             "currentPage" => $this->currentPage,
@@ -107,7 +111,9 @@ class AdminController extends Controller
         if (!$module) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
         
         if ($request->isPost()) {
-            $module->loadData($request->getBody());
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? Module::BOOL_TRUE : Module::BOOL_FALSE;
+            $module->loadData($data);
             $updateData = $module->getUpdateData();
             if ($module->validate()) {
                 Module::update($updateData);
@@ -129,9 +135,7 @@ class AdminController extends Controller
 
         if (!$module) throw new \MVC\Exceptions\BadRequestException("Not Found Your Module!");
 
-        $module->isActive = Module::BOOL_FALSE;
-        $updateData = $module->getUpdateData();
-        $module = Module::update($updateData);
+        $module->delete();
         Application::$app->response->redirect('/admin?tab=modules');
     }
 }

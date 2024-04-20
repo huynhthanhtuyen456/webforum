@@ -120,7 +120,7 @@ $question_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$QUESTION_TABLE."
     moduleID INT NOT NULL,
     CONSTRAINT fkQuestionModule
         FOREIGN KEY(moduleID) 
-        REFERENCES Module(id)
+        REFERENCES Module(id) ON DELETE CASCADE
     );
 ";
 array_push($sql_statements, $question_table_sql);

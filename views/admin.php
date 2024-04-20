@@ -50,13 +50,34 @@ enum Tab: string
                             <th scope="col">Updated At</th>
                             <th scope="col">Actions</th>
                         </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/questions/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPageQuestions > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total questions: <?=$totalQuestions?> | Page:
+                                    <?php for($questionPageIndex; $questionPageIndex < $totalPageQuestions; ++$questionPageIndex): ?>
+                                        <a
+                                            href="/admin?page=<?=$questionPageIndex+1?>&tab=modules" 
+                                            class="text-decoration-none <?=$currentPage == $questionPageIndex+1 ? 'text-dark' : ''?>">
+                                            <?=$questionPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
                     </thead>
                     <tbody>
                         <?php
                             use MVC\Models\User;
-                            if($questions):  
-                            foreach ($questions as $question):
-                            $user = User::findOne(['id' => $question["authorID"]])
+                            if($questions):
+                        ?>
+                            <?php
+                                foreach ($questions as $question):
+                                $user = User::findOne(['id' => $question["authorID"]])
                             ?>
                                 <tr>
                                     <td><a href="/admin/questions/<?=$question["id"]?>/edit"><?=$question["thread"]?></a></td>
@@ -89,27 +110,9 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-11">
-                                        <?php
-                                            for($questionPageIndex; $questionPageIndex < $totalPageQuestions; ++$questionPageIndex) {  
-                                        ?>
-                                            <a 
-                                                href="/admin?page=<?=$questionPageIndex+1?>&tab=questions" 
-                                                class="text-decoration-none <?=$currentPage == $questionPageIndex+1 ? 'text-dark' : ''?>">
-                                                <?=$questionPageIndex+1?>
-                                            </a>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="col-1">
-                                        <a role="button" class="btn btn-outline-primary" href="/admin/questions/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                                <td colspan="8"><p class="mt-4 text-center">No Content.</p></td>
                             </td>
                         <?php endif ?>
                     </tbody>
@@ -121,18 +124,37 @@ enum Tab: string
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Updated At</th>
                             <th scope="col">Actions</th>
                         </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/modules/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPageModules > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total modules: <?=$totalModules?> | Page:
+                                    <?php for($modulePageIndex; $modulePageIndex < $totalPageModules; ++$modulePageIndex): ?>
+                                        <a
+                                            href="/admin?page=<?=$modulePageIndex+1?>&tab=modules" 
+                                            class="text-decoration-none <?=$currentPage == $modulePageIndex+1 ? 'text-dark' : ''?>">
+                                            <?=$modulePageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
                     </thead>
                     <tbody>
-                        <?php
-                            if($modules):  
-                            foreach ($modules as $module):
-                            ?>
+                        <?php if($modules): ?>
+                            <?php foreach ($modules as $module): ?>
                                 <tr>
                                     <td><a href="/admin/modules/<?=$module["id"]?>/edit"><?=$module["name"]?></a></td>
+                                    <td><?=$module["isActive"] ? "Active" : "Inactive"?></td>
                                     <td><?=$module["createdAt"]?></td>
                                     <td><?=$module["updatedAt"]?></td>
                                     <td>
@@ -158,24 +180,6 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-11">
-                                    <?php
-                                        for($modulePageIndex; $modulePageIndex < $totalPageModules; ++$modulePageIndex) {  
-                                    ?>
-                                        <a
-                                            href="/admin?page=<?=$modulePageIndex+1?>&tab=modules" 
-                                            class="text-decoration-none <?=$currentPage == $modulePageIndex+1 ? 'text-dark' : ''?>">
-                                            <?=$modulePageIndex+1?>
-                                        </a>
-                                    <?php } ?>
-                                    </div>
-                                    <div class="col-1">
-                                        <a role="button" class="btn btn-outline-primary" href="/admin/modules/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
@@ -198,12 +202,29 @@ enum Tab: string
                             <th scope="col">Logined At</th>
                             <th scope="col">Actions</th>
                         </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/users/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPageUsers > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total users: <?=$totalUsers?> | Page:
+                                    <?php for($userPageIndex; $userPageIndex < $totalPageUsers; ++$userPageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$userPageIndex+1?>&tab=users" 
+                                            class="text-decoration-none <?=$currentPage == $userPageIndex+1 ? 'text-dark' : ''?>">
+                                            <?=$userPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
                     </thead>
                     <tbody>
-                        <?php
-                            if($users):  
-                            foreach ($users as $user):
-                            ?>
+                        <?php if($users): ?>
+                            <?php foreach ($users as $user): ?>
                                 <tr>
                                     <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["firstName"]?></a></td>
                                     <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["lastName"]?></a></td>
@@ -235,24 +256,6 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-11">
-                                    <?php
-                                        for($userPageIndex; $userPageIndex < $totalPageUsers; ++$userPageIndex) {  
-                                    ?>
-                                        <a 
-                                            href="/admin?page=<?=$userPageIndex+1?>&tab=users" 
-                                            class="text-decoration-none <?=$currentPage == $userPageIndex+1 ? 'text-dark' : ''?>">
-                                            <?=$userPageIndex+1?>
-                                        </a>
-                                    <?php } ?>
-                                    </div>
-                                    <div class="col-1">
-                                        <a role="button" class="btn btn-outline-primary" href="/admin/users/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
@@ -273,12 +276,29 @@ enum Tab: string
                             <th scope="col">Updated At</th>
                             <th scope="col">Actions</th>
                         </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/users/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPageContacts > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total contacts: <?=$totalContacts?> <?=$totalPageContacts > 0 ? "| Page:" : ""?> 
+                                    <?php for($contactPageIndex; $contactPageIndex < $totalPageContacts; ++$contactPageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$contactPageIndex+1?>&tab=contacts" 
+                                            class="text-decoration-none <?=$currentPage == $contactPageIndex+1 ? 'text-dark' : '' ?>">
+                                            <?=$contactPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
                     </thead>
                     <tbody>
-                        <?php
-                            if($contacts):  
-                            foreach ($contacts as $contact):
-                            ?>
+                        <?php if($contacts): ?>
+                            <?php foreach ($contacts as $contact): ?>
                                 <tr>
                                     <td><a href="/admin/contacts/<?=$contact["id"]?>/edit"><?=$contact["subject"]?></a></td>
                                     <td><?=$contact["message"]?></td>
@@ -308,24 +328,6 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-11">
-                                    <?php
-                                        for($contactPageIndex; $contactPageIndex < $totalPageContacts; ++$contactPageIndex) {  
-                                    ?>
-                                        <a 
-                                            href="/admin?page=<?=$contactPageIndex+1?>&tab=contacts" 
-                                            class="text-decoration-none <?=$currentPage == $contactPageIndex+1 ? 'text-dark' : '' ?>">
-                                            <?=$contactPageIndex+1?>
-                                        </a>
-                                    <?php } ?>
-                                    </div>
-                                    <div class="col-1">
-                                        <a role="button" class="btn btn-outline-primary" href="/admin/contacts/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>

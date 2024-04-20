@@ -50,7 +50,7 @@ class QuestionController extends Controller
 
     public function get(Request $request)
     {
-        $modules = Module::findAll();
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
         return $this->render('askquestions', [
             'model' => $this->model,
             'modules' => $modules
@@ -72,7 +72,7 @@ class QuestionController extends Controller
             Application::$app->response->redirect('/question/'.$id);
         }
         
-        $modules = Module::findAll([], 1000, 0);
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
         return $this->render('askquestions', [
             'model' => $questionModel,
             'modules' => $modules

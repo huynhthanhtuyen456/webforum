@@ -42,6 +42,22 @@ abstract class DbModel extends Model
         return true;
     }
 
+    public function delete()
+    {
+        $tableName = $this->tableName();
+        $statement = self::prepare("DELETE FROM $tableName WHERE id = :id");
+
+        $statement->bindParam(":id", $this->id, \PDO::PARAM_INT);
+
+        try {
+            $statement->execute();
+        } catch (\Exception $e) {
+            throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());
+        }
+    
+        return true;
+    }
+
     public function getUpdateData()
     {
         $updateData = [];
