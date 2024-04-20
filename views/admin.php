@@ -41,7 +41,6 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Thread</th>
                             <th scope="col">Content</th>
                             <th scope="col">Module</th>
@@ -60,8 +59,7 @@ enum Tab: string
                             $user = User::findOne(['id' => $question["authorID"]])
                             ?>
                                 <tr>
-                                    <th scope="row"><?=$question["id"]?></th>
-                                    <td><?=$question["thread"]?></td>
+                                    <td><a href="/admin/questions/<?=$question["id"]?>/edit"><?=$question["thread"]?></a></td>
                                     <td><?=$question["content"]?></td>
                                     <td><?=\MVC\Models\Module::findOne(["id" => $question["moduleID"]])->name?></td>
                                     <td><?=$question["isActive"] ? "Active" : "Inactive" ?></td>
@@ -70,9 +68,26 @@ enum Tab: string
                                     <td><?=$question["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/questions/<?=$question["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/admin/questions/<?=$question["id"]?>/delete"><img src="/images/icon/trash.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteQuestion<?=$question["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
+                                <div class="modal" id="deleteQuestion<?=$question["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Module!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this module?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/questions/<?=$question["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endforeach ?>
                             <div class="container">
                                 <div class="row">
