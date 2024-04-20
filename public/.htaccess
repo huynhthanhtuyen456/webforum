@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+# https://stackoverflow.com/questions/76965553/proper-htaccess-files-for-using-a-public-folder-under-main-php-project-folder
+
+RewriteEngine On
+
+# Front-controller pattern (enabling "vanity" URLs)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule (.*) index.php?$1 [L,QSA]
+</IfModule>
