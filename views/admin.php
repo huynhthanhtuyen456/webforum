@@ -122,10 +122,10 @@ enum Tab: string
                                     <td><?=$module["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/modules/<?=$module["id"]?>/edit"><img alt="Edit" src="/images/icon/pen.svg"></a>
-                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?=$module["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteModule<?=$module["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
-                                <div class="modal" id="staticBackdrop<?=$module["id"]?>" tabindex="-1">
+                                <div class="modal" id="deleteModule<?=$module["id"]?>" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                         <div class="modal-header">
