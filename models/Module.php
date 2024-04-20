@@ -19,7 +19,7 @@ class Module extends TimestampModel
     public string $name = '';
 
     public function __construct() {
-        $this->extendAttributes(["name"]);
+        $this->extendAttributes(["name", "createdAt", "updatedAt"]);
     }
 
     public static function tableName(): string

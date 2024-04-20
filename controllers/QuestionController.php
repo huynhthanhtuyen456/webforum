@@ -60,13 +60,14 @@ class QuestionController extends Controller
     public function post(Request $request)
     {
         $questionModel = $this->model;
-        $image_path = Common::upload_file();
-        if ($image_path) {
-            $questionModel->image = $image_path;
-        }
         $questionModel->loadData($request->getBody());
     
-        if ($questionModel->validate() && $questionModel->save()) {
+        if ($questionModel->validate()) {
+            $image_path = Common::upload_file();
+            if ($image_path) {
+                $questionModel->image = $image_path;
+            }
+            $questionModel->save();
             $id = $questionModel->id;
             Application::$app->response->redirect('/question/'.$id);
         }

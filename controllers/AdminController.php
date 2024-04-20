@@ -1,7 +1,9 @@
 <?php
 namespace MVC\Controllers;
 
+use MVC\Core\Application;
 use MVC\Core\Controller;
+use MVC\Core\Request;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
@@ -75,11 +77,20 @@ class AdminController extends Controller
         ], $title="Admin");
     }
 
-    public function addModule()
+    public function addModule(Request $request)
     {
         $module = new Module();
+        
+        if ($request->isPost()) {
+            $module->loadData($request->getBody());
+            var_dump($module);
+            if ($module->validate() && $module->save()) {
+                Application::$app->response->redirect('/admin?tab=modules');
+            }
+        }
+
         return $this->render('adminAddModule', [
-            'module' => $module
+            'model' => $module
         ], "Add Module");
     }
 }

@@ -53,8 +53,6 @@ $app->router->get("modules", [ModuleController::class, 'list']);
 
 $app->router->get("users", [UserController::class, 'list']);
 
-$app->router->get("admin", [AdminController::class, 'index']);
-
 $app->router->get("contact", [ContactController::class, 'get']);
 $app->router->post("contact", [ContactController::class, 'post']);
 
@@ -67,4 +65,8 @@ $app->router->post("login", [AuthController::class, 'post']);
 $app->router->get("logout", [AuthController::class, 'logout']);
 
 $app->router->get("profile", [AuthController::class, 'profile']);
+
+$app->router->get("admin", [AdminController::class, 'index']);
+$app->router->get("admin/modules/add", [AdminController::class, 'addModule']);
+$app->router->post("admin/modules/add", [AdminController::class, 'addModule']);
 $app->run();
