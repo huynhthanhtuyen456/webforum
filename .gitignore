@@ -1,2 +1,4 @@
 .DS_Store
 .env
+public/uploads
+public/temp
