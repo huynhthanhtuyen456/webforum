@@ -4,6 +4,7 @@ namespace MVC\Controllers;
 use MVC\Core\Application;
 use MVC\Core\Controller;
 use MVC\Core\Request;
+use MVC\Helpers\Common;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
@@ -22,12 +23,14 @@ class AdminController extends Controller
             'addModule',
             'editModule',
             'deleteModule',
+            'editQuestion',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
             'addModule',
             'editModule',
             'deleteModule',
+            'editQuestion',
         ]));
         $this->limit = 10;
         $this->layout = "admin-base";
@@ -137,6 +140,81 @@ class AdminController extends Controller
 
         $module->delete();
         Application::$app->response->redirect('/admin?tab=modules');
+    }
+
+    public function addQuestion(Request $request)
+    {
+        $questionModel = new Question();
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
+        $users = User::findAll(["isActive" => Module::BOOL_TRUE]);
+
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            if (isset($data["authorID"])) {
+                $questionModel->authorID = (int) $data["authorID"];
+            }
+            $questionModel->loadData($request->getBody());
+            if ($questionModel->validate()) {
+                $image_path = Common::upload_file();
+                if ($image_path) {
+                    $questionModel->image = $image_path;
+                }
+                $questionModel->save();
+                Application::$app->response->redirect('/admin?tab=questions');
+            }
+        }
+
+        return $this->render('adminAddQuestion', [
+            'model' => $questionModel,
+            'modules' => $modules,
+            'users' => $users,
+        ], "Add Question");
+    }
+
+    public function editQuestion(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $question = Question::findOne(["id" => $id]);
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
+        $preselectedModule = Module::findOne(["id" => $question->moduleID]);
+
+        if (!$question) throw new \MVC\Exceptions\BadRequestException("Not Found Your Post!");
+
+        if ($request->isPost()) {
+            $image_path = Common::upload_file();
+            if ($image_path) {
+                $question->image = $image_path;
+            }
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? Module::BOOL_TRUE : Module::BOOL_FALSE;
+            $question->loadData($data);
+            $question->setUpdatedAt("now");
+            $updateData = $question->getUpdateData();
+
+            if ($question->validate()) {
+                Question::update($updateData);
+                Application::$app->response->redirect('/admin?tab=questions');
+            }
+        }
+
+        return $this->render($view='adminEditQuestion', $params=[
+            'model' => $question,
+            'modules' => $modules,
+            'preselectedModule' => $preselectedModule,
+        ], $title="Edit Question");
+    }
+
+    public function deleteQuestion(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $question = Question::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$question) throw new \MVC\Exceptions\BadRequestException("Not Found Your Question!");
+
+        $question->delete();
+        Application::$app->response->redirect('/admin?tab=questions');
     }
 }
 ?>

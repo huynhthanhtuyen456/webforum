@@ -75,9 +75,16 @@ $app->router->post("admin/modules/add", [AdminController::class, 'addModule']);
 
 $app->router->get("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
 $app->router->post("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
-
 $app->router->get("admin/modules/{id}/delete", [AdminController::class, 'deleteModule']);
-/* Module Management */
+/* End Module Management */
+
+/* Question Management */
+$app->router->get("admin/questions/add", [AdminController::class, 'addQuestion']);
+$app->router->post("admin/questions/add", [AdminController::class, 'addQuestion']);
+$app->router->get("admin/questions/{id}/edit", [AdminController::class, 'editQuestion']);
+$app->router->post("admin/questions/{id}/edit", [AdminController::class, 'editQuestion']);
+$app->router->get("admin/questions/{id}/delete", [AdminController::class, 'deleteQuestion']);
+/* End Question Management */
 
 /* End Definition Admin Path for Data Management */
 $app->run();

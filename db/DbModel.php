@@ -93,7 +93,6 @@ abstract class DbModel extends Model
         foreach ($where as $key => $item) {
             $statement->bindValue(":$key", $item);
         }
-        var_dump($statement);
 
         try {
             $statement->execute();

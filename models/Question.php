@@ -90,7 +90,6 @@ class Question extends TimestampModel
             $this->setCreatedAt("now");
             $this->setUpdatedAt("now");
             $this->isActive = self::BOOL_TRUE;
-            $this->authorID = Application::$app->session->get('user');
             return parent::save();
         } catch (\Exception $e) {
             throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());

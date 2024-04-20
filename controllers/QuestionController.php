@@ -67,6 +67,8 @@ class QuestionController extends Controller
             if ($image_path) {
                 $questionModel->image = $image_path;
             }
+
+            $questionModel->authorID = Application::$app->session->get('user');
             $questionModel->save();
             $id = $questionModel->id;
             Application::$app->response->redirect('/question/'.$id);
@@ -108,6 +110,8 @@ class QuestionController extends Controller
     {
         $id = (int)$request->getRouteParam($param="id");
         $question = Question::findOne(["id" => $id]);
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
+        $preselectedModule = Module::findOne(["id" => $question->moduleID]);
 
         if (!$question) throw new \MVC\Exceptions\BadRequestException("Not Found Your Post!");
 
@@ -130,6 +134,8 @@ class QuestionController extends Controller
 
         return $this->render($view='editquestion', $params=[
             'model' => $question,
+            'modules' => $modules,
+            'preselectedModule' => $preselectedModule,
         ], $title="Edit Question");
     }
 

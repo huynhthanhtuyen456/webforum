@@ -61,7 +61,7 @@ enum Tab: string
                                     Total questions: <?=$totalQuestions?> | Page:
                                     <?php for($questionPageIndex; $questionPageIndex < $totalPageQuestions; ++$questionPageIndex): ?>
                                         <a
-                                            href="/admin?page=<?=$questionPageIndex+1?>&tab=modules" 
+                                            href="/admin?page=<?=$questionPageIndex+1?>&tab=questions" 
                                             class="text-decoration-none <?=$currentPage == $questionPageIndex+1 ? 'text-dark' : ''?>">
                                             <?=$questionPageIndex+1?>
                                         </a>

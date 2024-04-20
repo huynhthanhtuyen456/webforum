@@ -15,6 +15,10 @@ $form = new QuestionForm();
         </datalist>
         <input type="hidden" name="moduleID" id="dataList-hidden">
         <?php echo $form->field($model, 'thread') ?>
+        <div class="form-check form-switch mt-2">
+            <input class="form-check-input" type="checkbox" id="questionActiveChecked" name="isActive" <?=$model->isActive ? 'checked' : ''?>>
+            <label class="form-check-label" for="questionActiveChecked">Active</label>
+        </div>
         <?php echo $form->textAreaField($model, 'content') ?>
         <?php echo $form->imageField($model, 'image') ?>
         <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
