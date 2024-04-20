@@ -17,9 +17,10 @@ class Module extends TimestampModel
 {
     public int $id = 0;
     public string $name = '';
+    public int $isActive = self::BOOL_FALSE;
 
     public function __construct() {
-        $this->extendAttributes(["name", "createdAt", "updatedAt"]);
+        $this->extendAttributes(["name", "createdAt", "updatedAt", "isActive"]);
     }
 
     public static function tableName(): string
@@ -33,7 +34,8 @@ class Module extends TimestampModel
             "id",
             "name",
             "createdAt",
-            "updatedAt"
+            "updatedAt",
+            "isActive",
         ]));
     }
 
@@ -55,6 +57,7 @@ class Module extends TimestampModel
     {
         $this->setCreatedAt("now");
         $this->setUpdatedAt("now");
+        $this->isActive = self::BOOL_TRUE;
         return parent::save();
     }
 }

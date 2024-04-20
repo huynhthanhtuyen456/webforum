@@ -19,11 +19,17 @@ class AdminController extends Controller
     {;
         $this->registerMiddleware(new AuthMiddleware([
             'index',
+            'addModule',
+            'editModule',
+            'deleteModule',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
+            'addModule',
+            'editModule',
+            'deleteModule',
         ]));
-        $this->limit = 4;
+        $this->limit = 10;
         $this->layout = "admin-base";
     }
 
@@ -47,7 +53,7 @@ class AdminController extends Controller
         $totalQuestions = Question::countAll();
         $totalPageQuestions = ceil($totalQuestions / $this->getLimit());
 
-        $modules = Module::findAll([], $this->getLimit(), $this->getPageOffset());
+        $modules = Module::findAll(['isActive' => Module::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
         $totalModules = Module::countAll();
         $totalPageModules = ceil($totalModules / $this->getLimit());
 
@@ -112,6 +118,21 @@ class AdminController extends Controller
         return $this->render('adminEditModule', [
             'model' => $module
         ], "Add Module");
+    }
+
+    public function deleteModule(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $module = Module::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$module) throw new \MVC\Exceptions\BadRequestException("Not Found Your Module!");
+
+        $module->isActive = Module::BOOL_FALSE;
+        $updateData = $module->getUpdateData();
+        $module = Module::update($updateData);
+        Application::$app->response->redirect('/admin?tab=modules');
     }
 }
 ?>

@@ -98,6 +98,7 @@ array_push($sql_statements, $role_permission_table_sql);
 $module_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$MODULE_TABLE." (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR( 255 ) NOT NULL,
+    isActive BOOLEAN NOT NULL,
     createdAt DATETIME NOT NULL,
     updatedAt DATETIME NOT NULL
     );

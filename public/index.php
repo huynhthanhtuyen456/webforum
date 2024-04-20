@@ -66,6 +66,7 @@ $app->router->get("logout", [AuthController::class, 'logout']);
 
 $app->router->get("profile", [AuthController::class, 'profile']);
 
+/* Define Admin Path for Data Management */
 $app->router->get("admin", [AdminController::class, 'index']);
 
 /* Module Management */
@@ -74,5 +75,9 @@ $app->router->post("admin/modules/add", [AdminController::class, 'addModule']);
 
 $app->router->get("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
 $app->router->post("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
+
+$app->router->get("admin/modules/{id}/delete", [AdminController::class, 'deleteModule']);
 /* Module Management */
+
+/* End Definition Admin Path for Data Management */
 $app->run();

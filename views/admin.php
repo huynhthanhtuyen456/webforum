@@ -41,7 +41,7 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Thread</th>
                             <th scope="col">Content</th>
                             <th scope="col">Module</th>
@@ -105,7 +105,7 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Updated At</th>
@@ -159,7 +159,7 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
                             <th scope="col">First Name</th>
                             <th scope="col">Last Name</th>
                             <th scope="col">Email Address</th>
@@ -221,7 +221,7 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Subject</th>
                             <th scope="col">Message</th>
                             <th scope="col">Email Address</th>
