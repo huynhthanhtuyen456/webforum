@@ -37,7 +37,7 @@ enum Tab: string
     </div>
     <div class="card-body">
         <div class="tab-content mt-3">
-            <div class="tab-pane <?=$tab == Tab::Question->value ? 'active' : ''?>" id="questions" role="tabpanel">
+            <div class="table-responsive tab-pane <?=$tab == Tab::Question->value ? 'active' : ''?>" id="questions" role="tabpanel">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -116,7 +116,7 @@ enum Tab: string
                 </table>
             </div>
                 
-            <div class="tab-pane <?=$tab == Tab::Module->value ? 'active' : ''?>" id="modules" role="tabpanel" aria-labelledby="modules-tab">
+            <div class="table-responsive tab-pane <?=$tab == Tab::Module->value ? 'active' : ''?>" id="modules" role="tabpanel" aria-labelledby="modules-tab">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -185,7 +185,7 @@ enum Tab: string
                 </table>
             </div>
                 
-            <div class="tab-pane <?=$tab == Tab::User->value ? 'active' : ''?>" id="users" role="tabpanel" aria-labelledby="users-tab">
+            <div class="table-responsive tab-pane <?=$tab == Tab::User->value ? 'active' : ''?>" id="users" role="tabpanel" aria-labelledby="users-tab">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -247,7 +247,7 @@ enum Tab: string
                 </table>
             </div>
 
-            <div class="tab-pane <?=$tab == Tab::Contact->value ? 'active' : ''?>" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
+            <div class="table-responsive tab-pane <?=$tab == Tab::Contact->value ? 'active' : ''?>" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
                 <table class="table table-hover">
                     <thead>
                         <tr>
