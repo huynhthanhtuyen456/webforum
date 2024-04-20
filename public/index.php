@@ -67,6 +67,12 @@ $app->router->get("logout", [AuthController::class, 'logout']);
 $app->router->get("profile", [AuthController::class, 'profile']);
 
 $app->router->get("admin", [AdminController::class, 'index']);
+
+/* Module Management */
 $app->router->get("admin/modules/add", [AdminController::class, 'addModule']);
 $app->router->post("admin/modules/add", [AdminController::class, 'addModule']);
+
+$app->router->get("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
+$app->router->post("admin/modules/{id}/edit", [AdminController::class, 'editModule']);
+/* Module Management */
 $app->run();

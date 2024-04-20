@@ -72,7 +72,7 @@ class QuestionController extends Controller
             Application::$app->response->redirect('/question/'.$id);
         }
         
-        $modules = Module::findAll();
+        $modules = Module::findAll([], 1000, 0);
         return $this->render('askquestions', [
             'model' => $questionModel,
             'modules' => $modules

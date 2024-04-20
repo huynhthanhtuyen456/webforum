@@ -9,7 +9,6 @@ class ModuleController extends Controller
 {
     public function list()
     {
-        $modules = Module::findAll();
         if (isset($_GET["page"])) {
             $page = $_GET["page"];
             try {
@@ -20,6 +19,7 @@ class ModuleController extends Controller
                 throw new BadRequestException($e->getMessage());
             }
         }
+        $modules = Module::findAll([], $this->getLimit(), $this->getPageOffset());
         $totalModules = Module::countAll([]);
         $totalPage = ceil($totalModules / $this->getLimit());
         return $this->render($view='modules', $params=[

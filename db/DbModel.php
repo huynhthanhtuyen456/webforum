@@ -115,7 +115,7 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public static function findAll(array $where = [], int $limit = 5, int $offset = 0)
+    public static function findAll(array $where = [], int $limit = 0, int $offset = 0)
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);

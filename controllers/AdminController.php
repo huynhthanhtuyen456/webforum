@@ -83,13 +83,33 @@ class AdminController extends Controller
         
         if ($request->isPost()) {
             $module->loadData($request->getBody());
-            var_dump($module);
             if ($module->validate() && $module->save()) {
                 Application::$app->response->redirect('/admin?tab=modules');
             }
         }
 
         return $this->render('adminAddModule', [
+            'model' => $module
+        ], "Add Module");
+    }
+
+    public function editModule(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $module = Module::findOne(["id" => $id]);
+        
+        if (!$module) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
+        
+        if ($request->isPost()) {
+            $module->loadData($request->getBody());
+            $updateData = $module->getUpdateData();
+            if ($module->validate()) {
+                Module::update($updateData);
+                Application::$app->response->redirect('/admin?tab=modules');
+            }
+        }
+
+        return $this->render('adminEditModule', [
             'model' => $module
         ], "Add Module");
     }
