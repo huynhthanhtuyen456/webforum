@@ -75,11 +75,11 @@ enum Tab: string
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Delete This Module!</h5>
+                                            <h5 class="modal-title">Delete This Question!</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Do you want to delete this module?</p>
+                                            <p>Do you want to delete this question?</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
@@ -103,7 +103,7 @@ enum Tab: string
                                         <?php } ?>
                                     </div>
                                     <div class="col-1">
-                                        <a href="/admin/questions/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
+                                        <a role="button" class="btn btn-outline-primary" href="/admin/questions/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@ enum Tab: string
                                     <?php } ?>
                                     </div>
                                     <div class="col-1">
-                                        <a href="/admin/modules/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
+                                        <a role="button" class="btn btn-outline-primary" href="/admin/modules/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,6 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">First Name</th>
                             <th scope="col">Last Name</th>
                             <th scope="col">Email Address</th>
@@ -206,19 +205,35 @@ enum Tab: string
                             foreach ($users as $user):
                             ?>
                                 <tr>
-                                    <th scope="row"><?=$user["id"]?></th>
-                                    <td><?=$user["firstName"]?></td>
-                                    <td><?=$user["lastName"]?></td>
+                                    <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["firstName"]?></a></td>
+                                    <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["lastName"]?></a></td>
                                     <td><?=$user["emailAddress"]?></td>
-                                    <td><?=$user["isActive"] ? "Activated" : "Inactivated"?></td>
+                                    <td><?=$user["isActive"] ? "Active" : "Inactive"?></td>
                                     <td><?=$user["isSuperAdmin"] ? "Yes" : "No"?></td>
                                     <td><?=$user["registeredAt"]?></td>
                                     <td><?=$user["loginedAt"]?></td>
                                     <td>
                                         <a href="/admin/users/<?=$user["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/admin/users/<?=$user["id"]?>/delete"><img src="/images/icon/trash.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteUser<?=$user["id"]?>"><img src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
+                                <div class="modal" id="deleteUser<?=$user["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This User!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this user?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/users/<?=$user["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endforeach ?>
                             <div class="container">
                                 <div class="row">
@@ -234,7 +249,7 @@ enum Tab: string
                                     <?php } ?>
                                     </div>
                                     <div class="col-1">
-                                        <a href="/admin/users/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
+                                        <a role="button" class="btn btn-outline-primary" href="/admin/users/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -251,7 +266,6 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Subject</th>
                             <th scope="col">Message</th>
                             <th scope="col">Email Address</th>
@@ -266,17 +280,33 @@ enum Tab: string
                             foreach ($contacts as $contact):
                             ?>
                                 <tr>
-                                    <th scope="row"><?=$contact["id"]?></th>
-                                    <td><?=$contact["subject"]?></td>
+                                    <td><a href="/admin/contacts/<?=$contact["id"]?>/edit"><?=$contact["subject"]?></a></td>
                                     <td><?=$contact["message"]?></td>
                                     <td><?=$contact["emailAddress"]?></td>
                                     <td><?=$contact["createdAt"]?></td>
                                     <td><?=$contact["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/contacts/<?=$contact["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/admin/contacts/<?=$contact["id"]?>/delete"><img src="/images/icon/trash.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteContact<?=$contact["id"]?>"><img src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
+                                <div class="modal" id="deleteContact<?=$contact["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Contact!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this contact?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/contacts/<?=$contact["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endforeach ?>
                             <div class="container">
                                 <div class="row">
@@ -292,7 +322,7 @@ enum Tab: string
                                     <?php } ?>
                                     </div>
                                     <div class="col-1">
-                                        <a href="/admin/contacts/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
+                                        <a role="button" class="btn btn-outline-primary" href="/admin/contacts/add">Add <img class="mb-1" alt="Add" src="/images/icon/add.svg"></i></a>
                                     </div>
                                 </div>
                             </div>
