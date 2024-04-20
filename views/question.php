@@ -58,10 +58,3 @@ if ($user) {
         </div>
     </div>
 </div>
-
-<script>
-    var myModal = document.getElementById('staticBackdrop');
-
-    myModal.addEventListener('shown.bs.modal', function () {
-    })
-</script>

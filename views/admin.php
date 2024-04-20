@@ -105,7 +105,6 @@ enum Tab: string
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Updated At</th>
@@ -118,15 +117,31 @@ enum Tab: string
                             foreach ($modules as $module):
                             ?>
                                 <tr>
-                                    <th scope="row"><?=$module["id"]?></th>
-                                    <td><?=$module["name"]?></td>
+                                    <td><a href="/admin/modules/<?=$module["id"]?>/edit"><?=$module["name"]?></a></td>
                                     <td><?=$module["createdAt"]?></td>
                                     <td><?=$module["updatedAt"]?></td>
                                     <td>
-                                        <a href="/admin/modules/<?=$module["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/admin/modules/<?=$module["id"]?>/delete"><img src="/images/icon/trash.svg"></a>
+                                        <a href="/admin/modules/<?=$module["id"]?>/edit"><img alt="Edit" src="/images/icon/pen.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?=$module["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
+                                <div class="modal" id="staticBackdrop<?=$module["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Module!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this module?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/modules/<?=$module["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endforeach ?>
                             <div class="container">
                                 <div class="row">
