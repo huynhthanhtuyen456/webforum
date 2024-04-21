@@ -44,6 +44,7 @@ $app->router->get("ask-questions", [QuestionController::class, 'get']);
 $app->router->post("ask-questions", [QuestionController::class, 'post']);
 
 $app->router->get("question/{id}", [QuestionController::class, 'detail']);
+$app->router->post("question/answers/add", [QuestionController::class, 'addAnswer']);
 
 $app->router->get("question/{id}/edit", [QuestionController::class, 'update']);
 $app->router->post("question/{id}/edit", [QuestionController::class, 'update']);

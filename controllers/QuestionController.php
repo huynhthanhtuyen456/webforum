@@ -9,6 +9,7 @@ use MVC\Helpers\Common;
 use MVC\Models\Question;
 use MVC\Models\User;
 use MVC\Models\Module;
+use MVC\Models\Answer;
 use MVC\Middlewares\AuthMiddleware;
 
 
@@ -23,6 +24,7 @@ class QuestionController extends Controller
             'update',
             'delete',
         ]));
+        $this->limit = 10;
     }
 
     public function list()
@@ -98,11 +100,39 @@ class QuestionController extends Controller
             $intervalCreatedDay = $intervalCreatedDay == 1 ? $intervalCreatedDay." day" : $intervalCreatedDay." days";
         }
 
+        if (Application::$app->isLogined()) {
+            $answerModelForm = new Answer();
+            $answerModelForm->questionID = $question->id;           
+            $answerModelForm->authorID = Application::$app->user->id;           
+        }
+
+        if (isset($_GET["page"])) {
+            $page = $_GET["page"];
+            try {
+                $page = (int) $page;
+                $this->currentPage = $page;
+                if ($page < 0) throw new \Exception($message="Invalid page query param.");
+            } catch (\Exception $e) {
+                throw new BadRequestException($e->getMessage());
+            }
+        }
+
+        $latestAnswers = Answer::getLatestAnswers([
+            "isActive" => Answer::BOOL_TRUE,
+             "questionID" => $question->id
+            ], $this->getLimit(), $this->getPageOffset());
+        $totalLastestAnswers = Answer::countAll(["isActive" => Answer::BOOL_TRUE, "questionID" => $question->id]);
+        $totalLastestAnswersPage = ceil($totalLastestAnswers / $this->getLimit());
 
         return $this->render($view='question', $params=[
             'model' => $question,
             'authorName' => $authorName,
             'intervalCreatedDay' => $intervalCreatedDay,
+            'answerModelForm' => $answerModelForm,
+
+            'latestAnswers' => $latestAnswers,
+            'totalLastestAnswers' => $totalLastestAnswers,
+            'totalLastestAnswersPage' => $totalLastestAnswersPage,
         ], $title="Question");
     }
     
@@ -156,6 +186,20 @@ class QuestionController extends Controller
         Question::update($updateData);
         $id = $question->id;
         Application::$app->response->redirect('/questions');
+    }
+
+    public function addAnswer(Request $request)
+    {
+        $answerModelForm = new Answer();
+        $answerModelForm->loadData($request->getBody());
+        $questionID = $answerModelForm->questionID;
+    
+        if ($answerModelForm->validate() && $answerModelForm->save()) {
+            Application::$app->session->setFlash('success', 'The latest answer was added!');
+            Application::$app->response->redirect('/question/'.$questionID);
+            return;
+        }
+        Application::$app->session->setFlash('addAnswerFailure', 'Cannot add your answer!');
     }
 }
 ?>

@@ -1,5 +1,7 @@
 <?php
 use MVC\Core\Application;
+use MVC\Models\User;
+use MVC\Forms\Form;
 
 $user = Application::isLogined();
 $isAuthor = false;
@@ -14,8 +16,16 @@ if ($user) {
 <div class="container-fluid p-2 m-2">
     <?php
         if (Application::$app->session->getFlash('success')): ?>
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <p><?=Application::$app->session->getFlash('success')?></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    <?php endif; ?>
+    <?php
+        if (Application::$app->session->getFlash('addAnswerFailure')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p><?=Application::$app->session->getFlash('addAnswerFailure')?></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
     <?php endif; ?>
     <?php if ($model->image): ?>
@@ -35,16 +45,52 @@ if ($user) {
         </h2>
         <p>Posted by: <?php echo $authorName ?> | Date: <?php echo $intervalCreatedDay ?></p>
         <p><?php echo $model->content ?></p>
-        <!-- <h3>Answers</h3>
-        <ul class="answer-list">
-            <li>
-                <div class="profile-picture">
-                    <img src="/images/profile/user2.jpg" alt="Profile Picture" class="user-avatar-in-qna">
-                </div>
-                <p>Posted by: Jane Smith | Date: March 11, 2024</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac dolor nec neque egestas congue.</p>
-            </li>
-        </ul> -->
+    </div>
+    <?php if(isset($answerModelForm)): ?>
+        <div class="row">
+            <div class="col-6">
+                <?php $form = Form::begin('/question/answers/add', 'post') ?>
+                    <?php echo $form->textAreaField($answerModelForm, 'answer') ?>
+                    <input type="hidden" name="questionID" value="<?=$answerModelForm->questionID?>">
+                    <input type="hidden" name="authorID" value="<?=$answerModelForm->authorID?>">
+                    <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
+                <?php Form::end() ?>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if($totalLastestAnswers): ?>
+        <div class="row" id="answers">
+            <h3>Total Answers: <?=$totalLastestAnswers?></h3>
+            <div class="list-group">
+                <?php foreach($latestAnswers as $item): ?>
+                    <?php
+                        $date1 = new \DateTime($item["createdAt"]);
+                        $date2 = new \DateTime('now');
+                        $intervalCreatedDay = $date2->diff($date1);
+                        $intervalCreatedDay = $intervalCreatedDay->days;
+                        if ($intervalCreatedDay < 1) {
+                            $intervalCreatedDay = $item["createdAt"];
+                        } else {
+                            $intervalCreatedDay = $intervalCreatedDay == 1 ? $intervalCreatedDay." day" : $intervalCreatedDay." days";
+                        }
+                    ?>
+
+                    <a class="list-group-item list-group-item-action" aria-current="true">
+                        <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><?=User::findOne(['id' => $item["authorID"]])->getDisplayName();?></h5>
+                        <small><?=$intervalCreatedDay?></small>
+                        </div>
+                        <p class="mb-1"><?=$item["answer"]?></p>
+                    </a>
+                <?php endforeach ?>
+            </div>
+        </div>
+    <?php endif ?>
+    <div class="container">
+        <?php for($i; $i < $totalLastestAnswersPage; ++$i): ?>
+            <a href="/question/<?=$model->id?>?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+        <?php endfor ?>
     </div>
     <div class="modal" id="staticBackdrop" tabindex="-1">
         <div class="modal-dialog">

@@ -61,9 +61,9 @@
                 <?php endif ?>          
             <?php endforeach ?>
         <div class="container">
-            <?php for($i; $i < $totalPage; ++$i) {  ?>
+            <?php for($i; $i < $totalPage; ++$i): ?>
                 <a href="/questions?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-            <?php } ?>
+            <?php endfor ?>
         </div>
     </div>
 </div>
