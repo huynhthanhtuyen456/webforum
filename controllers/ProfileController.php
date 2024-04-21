@@ -21,6 +21,9 @@ class ProfileController extends Controller
     {;
         $this->registerMiddleware(new AuthMiddleware([
             'index',
+            'addContact',
+            'editContact',
+            'deleteContact',
         ]));
         $this->limit = 10;
         $this->me = Application::$app->user;
@@ -46,7 +49,7 @@ class ProfileController extends Controller
         $totalQuestions = Question::countAll(['isActive' => Question::BOOL_TRUE, 'authorID' => $this->me->id]);
         $totalPageQuestions = ceil($totalQuestions / $this->getLimit());
 
-        $contacts = Contact::findAll(["emailAddress" => $this->emailAddress], $this->getLimit(), $this->getPageOffset());
+        $contacts = Contact::findAll(["emailAddress" => $this->me->emailAddress], $this->getLimit(), $this->getPageOffset());
         $totalContacts = Contact::countAll(["emailAddress" => $this->emailAddress]);
         $totalPageContacts = ceil($totalContacts / $this->getLimit());
 
@@ -62,6 +65,60 @@ class ProfileController extends Controller
             "currentPage" => $this->currentPage,
             "tab" => $tab,
         ], $title="Profile");
+    }
+
+    public function addContact(Request $request)
+    {
+        $contact = new Contact();
+        $contact->emailAddress = $this->me->emailAddress;
+
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $contact->loadData($data);
+            if ($contact->validate() && $contact->save()) {
+                Application::$app->response->redirect('/profile?tab=contacts&page=1');
+            }
+        }
+
+        return $this->render('profileAddContact', [
+            'model' => $contact,
+        ], "Add Contact");
+    }
+
+    public function editContact(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $contact = Contact::findOne(["id" => $id, "emailAddress" => $this->me->emailAddress]);
+        
+        if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found Contact!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $contact->loadData($data);
+            if ($contact->validate()) {
+                $contact->setUpdatedAt("now");
+                $updateData = $contact->getUpdateData();
+                Contact::update($updateData);
+                Application::$app->response->redirect('/profile?tab=contacts');
+            }
+        }
+
+        return $this->render('profileEditContact', [
+            'model' => $contact
+        ], "Edit Contact");
+    }
+
+    public function deleteContact(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $contact = Contact::findOne(["id" => $id, "emailAddress" => $this->me->emailAddress]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
+
+        $contact->delete();
+        Application::$app->response->redirect('/profile?tab=contacts');
     }
 }
 ?>

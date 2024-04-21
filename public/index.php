@@ -67,6 +67,11 @@ $app->router->get("logout", [AuthController::class, 'logout']);
 
 /* Profile Management */
 $app->router->get("profile", [ProfileController::class, 'index']);
+$app->router->get("profile/contacts/add", [ProfileController::class, 'addContact']);
+$app->router->post("profile/contacts/add", [ProfileController::class, 'addContact']);
+$app->router->get("profile/contacts/{id}/edit", [ProfileController::class, 'editContact']);
+$app->router->post("profile/contacts/{id}/edit", [ProfileController::class, 'editContact']);
+$app->router->get("profile/contacts/{id}/delete", [ProfileController::class, 'deleteContact']);
 /* End Define Profile Management */
 
 /* Define Admin Path for Data Management */

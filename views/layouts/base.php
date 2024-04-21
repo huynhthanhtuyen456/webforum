@@ -19,12 +19,10 @@
             </div>
             <div class="col-4">
                 <aside class="sidebar">
-                    <h2>Most Asked Questions</h2>
-                    <ul>
-                        <li><a href="#">How to create a responsive layout?</a></li>
-                        <li><a href="#">Best practices for web development?</a></li>
-                        <li><a href="#">Introduction to HTML and CSS</a></li>
-                    </ul>
+                    <h2>Our Mission</h2>
+                    <p class="fw-normal">Our mission is to build libraries of high-quality questions and answers, and to foster collaboration within a safe and welcoming community rooted in kindness, cooperation and mutual respect. Whether you’ve come to ask questions or to generously share what you know, join us in building a community where all people feel welcome and can participate, regardless of expertise or identity.</p>
+                    <p class="fst-italic">Whether you’ve come to ask questions or to generously share what you know, join us in building a community where all people feel welcome and can participate, regardless of expertise or identity.</p>
+                    <p class="fst-normal">We commit to enforcing and improving the Code of Conduct. It applies to everyone using <strong>Ask To Learn</strong>, including our team, moderators, and anyone posting to Q&A sites or chat rooms.</p>
                 </aside>
             </div>
         </div>

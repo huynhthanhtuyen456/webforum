@@ -34,8 +34,25 @@ enum Tab: string
     <div class="card-body">
         <div class="tab-content mt-3">
             <div class="tab-pane <?=$tab == Tab::Profile->value ? 'active' : ''?>" id="profile" role="tabpanel">
-                <img src="<?=$user->image ? $user->image : '/images/profile/user.png'?>" width="200" height="200" alt="Profile Picture" class="img-thumbnail bg-transparent">
-                <h4><?=$user->getDisplayName();?></h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="<?=$user->image ? $user->image : '/images/profile/user.png'?>" width="200" height="200" alt="Profile Picture" class="img-thumbnail bg-transparent">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <h4><?=$user->getDisplayName();?></h4>
+                        </div>
+
+                        <?php if($user->birthday): ?>
+                            <div class="col-3">
+                                <p><?=$user->birthday?> <img src="/images/profile/birthday-cake.png" with="20" height="20" alt="Birthday"></p>
+                            </div>
+                        <?php endif?>
+                    </div>
+                </div>
             </div>
                 
             <div class="tab-pane <?=$tab == Tab::AboutMe->value ? 'active' : ''?>" id="aboutMe" role="tabpanel" aria-labelledby="aboutMe-tab">
@@ -172,7 +189,7 @@ enum Tab: string
                             <th scope="col">Actions</th>
                         </tr>
                         <tr>
-                            <a role="button" class="btn btn-outline-primary" href="/admin/contacts/add">
+                            <a role="button" class="btn btn-outline-primary" href="/profile/contacts/add">
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>
@@ -195,13 +212,13 @@ enum Tab: string
                         <?php if($contacts): ?>
                             <?php foreach ($contacts as $contact): ?>
                                 <tr>
-                                    <td><a href="/admin/contacts/<?=$contact["id"]?>/edit"><?=$contact["subject"]?></a></td>
+                                    <td><a href="/profile/contacts/<?=$contact["id"]?>/edit"><?=$contact["subject"]?></a></td>
                                     <td><?=$contact["message"]?></td>
                                     <td><?=$contact["emailAddress"]?></td>
                                     <td><?=$contact["createdAt"]?></td>
                                     <td><?=$contact["updatedAt"]?></td>
                                     <td>
-                                        <a href="/admin/contacts/<?=$contact["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                        <a href="/profile/contacts/<?=$contact["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
                                         <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteContact<?=$contact["id"]?>"><img src="/images/icon/trash.svg"></a>
                                     </td>
                                 </tr>
@@ -217,7 +234,7 @@ enum Tab: string
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                                            <a href="/admin/contacts/<?=$contact["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <a href="/profile/contacts/<?=$contact["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
                                         </div>
                                         </div>
                                     </div>
