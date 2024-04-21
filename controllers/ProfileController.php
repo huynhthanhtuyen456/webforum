@@ -46,8 +46,8 @@ class ProfileController extends Controller
         $totalQuestions = Question::countAll(['isActive' => Question::BOOL_TRUE, 'authorID' => $this->me->id]);
         $totalPageQuestions = ceil($totalQuestions / $this->getLimit());
 
-        $contacts = Contact::findAll([], $this->getLimit(), $this->getPageOffset());
-        $totalContacts = Contact::countAll();
+        $contacts = Contact::findAll(["emailAddress" => $this->emailAddress], $this->getLimit(), $this->getPageOffset());
+        $totalContacts = Contact::countAll(["emailAddress" => $this->emailAddress]);
         $totalPageContacts = ceil($totalContacts / $this->getLimit());
 
         return $this->render($view='profile', $params=[

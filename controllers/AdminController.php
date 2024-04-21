@@ -24,14 +24,30 @@ class AdminController extends Controller
             'addModule',
             'editModule',
             'deleteModule',
+            'addQuestion',
             'editQuestion',
+            'deleteQuestion',
+            'addUser',
+            'editUser',
+            'deleteUser',
+            'addContact',
+            'editContact',
+            'deleteContact',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
             'addModule',
             'editModule',
             'deleteModule',
+            'addQuestion',
             'editQuestion',
+            'deleteQuestion',
+            'addUser',
+            'editUser',
+            'deleteUser',
+            'addContact',
+            'editContact',
+            'deleteContact',
         ]));
         $this->limit = 10;
         $this->layout = "admin-base";
