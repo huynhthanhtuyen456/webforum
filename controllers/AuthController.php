@@ -31,11 +31,6 @@ class AuthController extends Controller
         ], "Login");
     }
 
-    public function profile()
-    {
-        return $this->render('profile');
-    }
-
     public function logout(Request $request, Response $response)
     {
         Application::$app->logout();

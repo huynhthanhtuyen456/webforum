@@ -6,7 +6,7 @@ $form = new Form();
 ?>
 
 <section class="main-content">
-    <h2 style="text-align: center;">Edit Module</h2>
+    <h2 style="text-align: center;">Edit User</h2>
 
     <?php $form = Form::begin('', 'post') ?>
         <div class="row">

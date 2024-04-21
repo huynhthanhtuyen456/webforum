@@ -9,6 +9,7 @@ use MVC\Controllers\ModuleController;
 use MVC\Controllers\UserController;
 use MVC\Controllers\RegisterController;
 use MVC\Controllers\AuthController;
+use MVC\Controllers\ProfileController;
 use MVC\Models\User;
 use MVC\Core\Application;
 use MVC\Core\DotEnv;
@@ -64,7 +65,9 @@ $app->router->post("login", [AuthController::class, 'post']);
 
 $app->router->get("logout", [AuthController::class, 'logout']);
 
-$app->router->get("profile", [AuthController::class, 'profile']);
+/* Profile Management */
+$app->router->get("profile", [ProfileController::class, 'index']);
+/* End Define Profile Management */
 
 /* Define Admin Path for Data Management */
 $app->router->get("admin", [AdminController::class, 'index']);

@@ -117,7 +117,7 @@ abstract class DbModel extends Model
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
 
         $fields = static::dbFields();
 
@@ -134,7 +134,7 @@ abstract class DbModel extends Model
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
         
         $fields = static::dbFields();
 
@@ -171,7 +171,7 @@ abstract class DbModel extends Model
         $tableName = static::tableName();
 
         $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
 
         $prepare_stm = $where ? "SELECT COUNT('id') FROM $tableName WHERE $sql" : "SELECT COUNT('id') FROM $tableName";
 

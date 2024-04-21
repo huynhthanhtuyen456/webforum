@@ -37,7 +37,7 @@ class QuestionController extends Controller
                 throw new BadRequestException($e->getMessage());
             }
         }
-        $questions = Question::findAll(["isActive" => true], $this->getLimit(), $this->getPageOffset());
+        $questions = Question::findAll(['isActive' => Question::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
         $totalQuestions = Question::countAll(["isActive" => true]);
         $totalPage = ceil($totalQuestions / $this->getLimit());
         return $this->render($view='questions', $params=[

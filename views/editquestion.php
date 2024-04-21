@@ -6,6 +6,7 @@ $form = new QuestionForm();
 ?>
 
 <section class="main-content">
+    <h2 style="text-align: center;">Edit Question</h2>
     <?php $form = QuestionForm::begin('', 'post') ?>
         <input class="form-control" autocomplete="off" value="<?=$preselectedModule->name?>" list="datalistOptions" id="dataList" placeholder="Type to search...">
         <datalist id="datalistOptions">
