@@ -105,6 +105,8 @@ $app->router->post("admin/users/add", [AdminController::class, 'addUser']);
 $app->router->get("admin/users/{id}/edit", [AdminController::class, 'editUser']);
 $app->router->post("admin/users/{id}/edit", [AdminController::class, 'editUser']);
 $app->router->get("admin/users/{id}/delete", [AdminController::class, 'deleteUser']);
+$app->router->get("admin/users/{id}/change-password", [AdminController::class, 'changePassword']);
+$app->router->post("admin/users/{id}/change-password", [AdminController::class, 'changePassword']);
 /* End User Management */
 
 /* User Management */

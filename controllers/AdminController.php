@@ -6,6 +6,7 @@ use MVC\Core\Controller;
 use MVC\Core\Request;
 use MVC\Helpers\Common;
 use MVC\Forms\EditUserModelForm;
+use MVC\Forms\AdminChangeUserPasswordForm;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
@@ -33,6 +34,7 @@ class AdminController extends Controller
             'addContact',
             'editContact',
             'deleteContact',
+            'changePassword',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
@@ -48,6 +50,7 @@ class AdminController extends Controller
             'addContact',
             'editContact',
             'deleteContact',
+            'changePassword',
         ]));
         $this->limit = 10;
         $this->layout = "admin-base";
@@ -358,6 +361,30 @@ class AdminController extends Controller
         $contact->delete();
         Application::$app->session->setFlash('success', 'The contact ID='.$contact->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=contacts');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $user = AdminChangeUserPasswordForm::findOne(["id" => $id]);
+        
+        if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found User!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $user->loadData($data);
+            if ($user->validate()) {
+                $user->password = password_hash($user->newPassword, PASSWORD_DEFAULT);
+                $updateData = $user->getUpdateData();
+                AdminChangeUserPasswordForm::update($updateData);
+                Application::$app->session->setFlash('success', 'Password of user ID='.$user->id.' was changed successfully!');
+                Application::$app->response->redirect('/admin?tab=users');
+            }
+        }
+
+        return $this->render('adminChangeUserPassword', [
+            'model' => $user
+        ], "Change Password");
     }
 }
 ?>

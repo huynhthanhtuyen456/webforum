@@ -26,6 +26,7 @@ class AuthController extends Controller
         if ($loginForm->validate() && $loginForm->login()) {
             Application::$app->response->redirect('/');
         }
+        $this->setLayout('auth');
         return $this->render('login', [
             'model' => $loginForm
         ], "Login");
