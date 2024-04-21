@@ -12,6 +12,12 @@ if ($user) {
 ?>
 
 <div class="container-fluid p-2 m-2">
+    <?php
+        if (Application::$app->session->getFlash('success')): ?>
+            <div class="alert alert-success">
+                <p><?=Application::$app->session->getFlash('success')?></p>
+            </div>
+    <?php endif; ?>
     <?php if ($model->image): ?>
         <div class="row">
             <img src="<?php echo $model->image ?>" alt="Profile Picture" class="img-fluid rounded" width="400" height="400">

@@ -18,6 +18,11 @@ enum Tab: string
 ?>
 
 <h1>Admin Dashboard</h1>
+<?php if (Application::$app->session->getFlash('success')): ?>
+    <div class="alert alert-success">
+        <p><?=Application::$app->session->getFlash('success')?></p>
+    </div>
+<?php endif; ?>
 <div class="card mb-5">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" id="bologna-list" role="tablist">

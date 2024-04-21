@@ -14,7 +14,7 @@ $form = new QuestionForm();
                 <option data-value="<?=$module['id']?>"><?=$module['name']?></option>
             <?php endforeach ?>
         </datalist>
-        <input type="hidden" name="moduleID" id="dataList-hidden">
+        <input type="hidden" name="moduleID" value="<?=$preselectedModule->id?>" id="dataList-hidden">
         <?php echo $form->field($model, 'thread') ?>
         <?php echo $form->textAreaField($model, 'content') ?>
         <?php echo $form->imageField($model, 'image') ?>

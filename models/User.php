@@ -30,6 +30,7 @@ class User extends UserModel
     public string $firstName = '';
     public string $lastName = '';
     public string $emailAddress = '';
+    public ?string $image = null;
     public int $reputation = 0;
     public ?string $birthday = null;
     public ?string $aboutMe = null;
@@ -52,6 +53,7 @@ class User extends UserModel
             "aboutMe",
             "birthday",
             "reputation",
+            "image",
         ]);
     }
 
@@ -105,6 +107,7 @@ class User extends UserModel
             "reputation",
             "birthday",
             "aboutMe",
+            "image",
         ]));
     }
 
@@ -119,6 +122,7 @@ class User extends UserModel
             'aboutMe' => 'About Me',
             'birthday' => 'Birthday',
             'reputation' => 'Reputation',
+            'image' => 'Profile Image',
         ];
     }
 

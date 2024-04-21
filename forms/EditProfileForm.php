@@ -16,6 +16,7 @@ class EditProfileForm extends DbModel
     public int $reputation = 0;
     public ?string $birthday = null;
     public ?string $aboutMe = null;
+    public ?string $image = null;
     public $loginedAt;
     public $registeredAt;
 
@@ -29,6 +30,7 @@ class EditProfileForm extends DbModel
             "aboutMe",
             "birthday",
             "reputation",
+            "image",
         ]);
     }
 
@@ -50,6 +52,7 @@ class EditProfileForm extends DbModel
             "reputation",
             "aboutMe",
             "birthday",
+            "image",
         ]));
     }
 
@@ -63,6 +66,7 @@ class EditProfileForm extends DbModel
             'password' => 'Password',
             'reputation' => 'Reputation',
             'birthday' => 'Birthday',
+            'image' => 'Profile Image',
         ];
     }
 

@@ -77,15 +77,21 @@ class ProfileController extends Controller
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
         
         if ($request->isPost()) {
+            $image_path = Common::upload_file();
+            echo $image_path;
+            if ($image_path) {
+                $user->image = $image_path;
+            }
             $data = $request->getBody();
             $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
             $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
             $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
             $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
             $user->loadData($data);
-            $updateData = $user->getUpdateData();
             if ($user->validate()) {
+                $updateData = $user->getUpdateData();
                 EditProfileForm::update($updateData);
+                Application::$app->session->setFlash('success', 'Your profile was updated successfully!');
                 Application::$app->response->redirect('/profile');
             }
         }
@@ -115,6 +121,7 @@ class ProfileController extends Controller
                 $user->password = password_hash($user->newPassword, PASSWORD_DEFAULT);
                 $updateData = $user->getUpdateData();
                 ChangeUserPasswordForm::update($updateData);
+                Application::$app->session->setFlash('success', 'Your password was changed successfully!');
                 Application::$app->response->redirect('/profile');
             }
         }
@@ -133,6 +140,7 @@ class ProfileController extends Controller
             $data = $request->getBody();
             $contact->loadData($data);
             if ($contact->validate() && $contact->save()) {
+                Application::$app->session->setFlash('success', 'Your contact was created successfully!');
                 Application::$app->response->redirect('/profile?tab=contacts&page=1');
             }
         }
@@ -156,6 +164,7 @@ class ProfileController extends Controller
                 $contact->setUpdatedAt("now");
                 $updateData = $contact->getUpdateData();
                 Contact::update($updateData);
+                Application::$app->session->setFlash('success', 'Your contact was updated successfully!');
                 Application::$app->response->redirect('/profile?tab=contacts');
             }
         }
@@ -175,6 +184,7 @@ class ProfileController extends Controller
         if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
 
         $contact->delete();
+        Application::$app->session->setFlash('success', 'Your contact was deleted successfully!');
         Application::$app->response->redirect('/profile?tab=contacts');
     }
 }

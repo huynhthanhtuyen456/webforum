@@ -128,6 +128,7 @@ class QuestionController extends Controller
             if ($question->validate()) {
                 Question::update($updateData);
                 $id = $question->id;
+                Application::$app->session->setFlash('success', 'Your post was updated successfully!');
                 Application::$app->response->redirect('/question/'.$id);
             }
         }

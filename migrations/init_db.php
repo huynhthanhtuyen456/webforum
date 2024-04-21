@@ -36,6 +36,7 @@ $user_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$USER_TABLE." (
     lastName VARCHAR( 255 ) NOT NULL,
     emailAddress VARCHAR (255) NOT NULL,
     password VARCHAR (2000) NOT NULL,
+    image VARCHAR (5028) NULL,
     isActive BOOLEAN NOT NULL,
     isSuperAdmin BOOLEAN NOT NULL,
     registeredAt DATETIME NOT NULL,
@@ -128,7 +129,6 @@ array_push($sql_statements, $question_table_sql);
 $answer_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$ANSWER_TABLE." (
     id INT AUTO_INCREMENT PRIMARY KEY,
     answer TEXT NOT NULL,
-    image VARCHAR (5028) NULL,
     createdAt DATETIME NOT NULL,
     updatedAt DATETIME NOT NULL,
     isActive BOOLEAN NOT NULL,

@@ -114,6 +114,7 @@ class AdminController extends Controller
         if ($request->isPost()) {
             $module->loadData($request->getBody());
             if ($module->validate() && $module->save()) {
+                Application::$app->session->setFlash('success', 'A new module was added successfully!');
                 Application::$app->response->redirect('/admin?tab=modules');
             }
         }
@@ -137,6 +138,7 @@ class AdminController extends Controller
             $updateData = $module->getUpdateData();
             if ($module->validate()) {
                 Module::update($updateData);
+                Application::$app->session->setFlash('success', 'The '.$module->name.' module was updated successfully!');
                 Application::$app->response->redirect('/admin?tab=modules');
             }
         }
@@ -156,6 +158,7 @@ class AdminController extends Controller
         if (!$module) throw new \MVC\Exceptions\BadRequestException("Not Found Your Module!");
 
         $module->delete();
+        Application::$app->session->setFlash('success', 'The module ID='.$module->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=modules');
     }
 
@@ -177,6 +180,7 @@ class AdminController extends Controller
                     $questionModel->image = $image_path;
                 }
                 $questionModel->save();
+                Application::$app->session->setFlash('success', 'A new question was added successfully!');
                 Application::$app->response->redirect('/admin?tab=questions');
             }
         }
@@ -211,6 +215,7 @@ class AdminController extends Controller
 
             if ($question->validate()) {
                 Question::update($updateData);
+                Application::$app->session->setFlash('success', 'The question ID='.$question->id.' was updated successfully!');
                 Application::$app->response->redirect('/admin?tab=questions');
             }
         }
@@ -232,6 +237,7 @@ class AdminController extends Controller
         if (!$question) throw new \MVC\Exceptions\BadRequestException("Not Found Your Question!");
 
         $question->delete();
+        Application::$app->session->setFlash('success', 'The question ID='.$question->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=questions');
     }
 
@@ -243,8 +249,11 @@ class AdminController extends Controller
             $data = $request->getBody();
             $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
             $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
+            $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
             $user->loadData($data);
             if ($user->validate() && $user->save()) {
+                Application::$app->session->setFlash('success', 'The new user was added successfully!');
                 Application::$app->response->redirect('/admin?tab=users');
             }
         }
@@ -271,6 +280,7 @@ class AdminController extends Controller
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
                 EditUserModelForm::update($updateData);
+                Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
                 Application::$app->response->redirect('/admin?tab=users');
             }
         }
@@ -290,6 +300,7 @@ class AdminController extends Controller
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found This User!");
 
         $user->delete();
+        Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=users');
     }
 
@@ -301,6 +312,7 @@ class AdminController extends Controller
             $data = $request->getBody();
             $contact->loadData($data);
             if ($contact->validate() && $contact->save()) {
+                Application::$app->session->setFlash('success', 'A new contact was added successfully!');
                 Application::$app->response->redirect('/admin?tab=contacts');
             }
         }
@@ -324,6 +336,7 @@ class AdminController extends Controller
                 $contact->setUpdatedAt("now");
                 $updateData = $contact->getUpdateData();
                 Contact::update($updateData);
+                Application::$app->session->setFlash('success', 'The contact ID='.$contact->id.' was updated successfully!');
                 Application::$app->response->redirect('/admin?tab=contacts');
             }
         }
@@ -343,6 +356,7 @@ class AdminController extends Controller
         if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
 
         $contact->delete();
+        Application::$app->session->setFlash('success', 'The contact ID='.$contact->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=contacts');
     }
 }
