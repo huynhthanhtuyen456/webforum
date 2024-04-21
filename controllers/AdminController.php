@@ -275,5 +275,58 @@ class AdminController extends Controller
         $user->delete();
         Application::$app->response->redirect('/admin?tab=users');
     }
+
+    public function addContact(Request $request)
+    {
+        $contact = new Contact();
+
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $contact->loadData($data);
+            if ($contact->validate() && $contact->save()) {
+                Application::$app->response->redirect('/admin?tab=contacts');
+            }
+        }
+
+        return $this->render('adminAddContact', [
+            'model' => $contact,
+        ], "Add Contact");
+    }
+
+    public function editContact(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $contact = Contact::findOne(["id" => $id]);
+        
+        if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found Contact!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $contact->loadData($data);
+            if ($contact->validate()) {
+                $contact->setUpdatedAt("now");
+                $updateData = $contact->getUpdateData();
+                Contact::update($updateData);
+                Application::$app->response->redirect('/admin?tab=contacts');
+            }
+        }
+
+        return $this->render('adminEditContact', [
+            'model' => $contact
+        ], "Edit Contact");
+    }
+
+    public function deleteContact(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $contact = Contact::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
+
+        $contact->delete();
+        Application::$app->response->redirect('/admin?tab=contacts');
+    }
 }
 ?>

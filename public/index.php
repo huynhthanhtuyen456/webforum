@@ -94,5 +94,13 @@ $app->router->post("admin/users/{id}/edit", [AdminController::class, 'editUser']
 $app->router->get("admin/users/{id}/delete", [AdminController::class, 'deleteUser']);
 /* End User Management */
 
+/* User Management */
+$app->router->get("admin/contacts/add", [AdminController::class, 'addContact']);
+$app->router->post("admin/contacts/add", [AdminController::class, 'addContact']);
+$app->router->get("admin/contacts/{id}/edit", [AdminController::class, 'editContact']);
+$app->router->post("admin/contacts/{id}/edit", [AdminController::class, 'editContact']);
+$app->router->get("admin/contacts/{id}/delete", [AdminController::class, 'deleteContact']);
+/* End User Management */
+
 /* End Definition Admin Path for Data Management */
 $app->run();

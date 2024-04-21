@@ -277,7 +277,7 @@ enum Tab: string
                             <th scope="col">Actions</th>
                         </tr>
                         <tr>
-                            <a role="button" class="btn btn-outline-primary" href="/admin/users/add">
+                            <a role="button" class="btn btn-outline-primary" href="/admin/contacts/add">
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>

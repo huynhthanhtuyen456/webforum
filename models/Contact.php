@@ -23,6 +23,12 @@ class Contact extends TimestampModel
     public string $subject = '';
     public string $message = '';
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->extendAttributes(["emailAddress", "subject", "message"]);
+    }
+
     public static function tableName(): string
     {
         return Constants::$CONTACT_TABLE;
@@ -63,7 +69,6 @@ class Contact extends TimestampModel
         try {
             $this->setCreatedAt("now");
             $this->setUpdatedAt("now");
-            $this->extendAttributes(["subject", "message", "emailAddress"]);
             return parent::save();
         } catch (\Exception $e) {
             throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());
