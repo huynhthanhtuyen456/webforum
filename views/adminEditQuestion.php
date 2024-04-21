@@ -14,7 +14,7 @@ $form = new QuestionForm();
                 <option data-value="<?=$module['id']?>"><?=$module['name']?></option>
             <?php endforeach ?>
         </datalist>
-        <input type="hidden" name="moduleID" id="dataList-hidden">
+        <input type="hidden" name="moduleID" value="<?=$preselectedModule->id?>" id="dataList-hidden">
         <?php echo $form->field($model, 'thread') ?>
         <div class="form-check form-switch mt-2">
             <input class="form-check-input" type="checkbox" id="questionActiveChecked" name="isActive" <?=$model->isActive ? 'checked' : ''?>>

@@ -204,6 +204,7 @@ class AdminController extends Controller
             }
             $data = $request->getBody();
             $data["isActive"] = $data["isActive"] ? Module::BOOL_TRUE : Module::BOOL_FALSE;
+            var_dump($data);
             $question->loadData($data);
             $question->setUpdatedAt("now");
             $updateData = $question->getUpdateData();

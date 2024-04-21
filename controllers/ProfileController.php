@@ -24,6 +24,7 @@ class ProfileController extends Controller
             'addContact',
             'editContact',
             'deleteContact',
+            'editProfile',
         ]));
         $this->limit = 10;
         $this->me = Application::$app->user;
@@ -65,6 +66,32 @@ class ProfileController extends Controller
             "currentPage" => $this->currentPage,
             "tab" => $tab,
         ], $title="Profile");
+    }
+
+    public function editProfile(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $user = EditUserModelForm::findOne(["id" => $this->me->id]);
+        
+        if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
+            $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
+            $user->loadData($data);
+            $updateData = $user->getUpdateData();
+            if ($user->validate()) {
+                EditUserModelForm::update($updateData);
+                Application::$app->response->redirect('/profile');
+            }
+        }
+
+        return $this->render('editProfile', [
+            'model' => $user
+        ], "Edit Profile");
     }
 
     public function addContact(Request $request)

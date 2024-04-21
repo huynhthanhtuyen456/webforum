@@ -13,7 +13,7 @@ enum Tab: string
     $user = Application::$app->user;
 ?>
 
-<h1>My Profile</h1>
+<h1>My Profile <a href="/profile/edit"><img src="/images/icon/pen.svg"></a></h1>
 <div class="card mb-5">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" role="tablist">
