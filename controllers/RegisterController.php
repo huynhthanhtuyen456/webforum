@@ -33,21 +33,5 @@ class RegisterController extends Controller
             'model' => $registerModel
         ]);
     }
-    // public function register(Request $request)
-    // {
-    //     $registerModel = new User();
-    //     if ($request->isPost()) {
-    //         $registerModel->loadData($request->getBody());
-    //         if ($registerModel->validate() && $registerModel->save()) {
-    //             Application::$app->session->setFlash('success', 'Thanks for registering');
-    //             Application::$app->response->redirect('/login');
-    //         }
-
-    //     }
-    //     $this->setLayout('auth');
-    //     return $this->render('register', [
-    //         'model' => $registerModel
-    //     ]);
-    // }
 }
 ?>

@@ -22,11 +22,16 @@ class EditUserModelForm extends User
 
     public function __construct()
     {
-        parent::__construct();
         $this->extendAttributes([
-            "reputation",
+            'firstName',
+            'lastName',
+            'emailAddress',
+            "registeredAt",
+            "isActive",
+            "isSuperAdmin",
             "aboutMe",
             "birthday",
+            "reputation",
         ]);
     }
 

@@ -218,6 +218,25 @@ class AdminController extends Controller
         Application::$app->response->redirect('/admin?tab=questions');
     }
 
+    public function addUser(Request $request)
+    {
+        $user = new User();
+
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
+            $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
+            $user->loadData($data);
+            if ($user->validate() && $user->save()) {
+                Application::$app->response->redirect('/admin?tab=users');
+            }
+        }
+
+        return $this->render('adminAddUser', [
+            'model' => $user,
+        ], "Add User");
+    }
+
     public function editUser(Request $request)
     {
         $id = (int)$request->getRouteParam($param="id");
@@ -229,6 +248,8 @@ class AdminController extends Controller
             $data = $request->getBody();
             $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
             $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
+            $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
             $user->loadData($data);
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
@@ -240,6 +261,19 @@ class AdminController extends Controller
         return $this->render('adminEditUser', [
             'model' => $user
         ], "Edit USer");
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $user = User::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found This User!");
+
+        $user->delete();
+        Application::$app->response->redirect('/admin?tab=users');
     }
 }
 ?>

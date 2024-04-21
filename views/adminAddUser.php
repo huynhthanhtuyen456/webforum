@@ -41,12 +41,8 @@ $form = new Form();
         </div>
         <?php echo $form->field($model, 'emailAddress') ?>
         <?php echo $form->textAreaField($model, 'aboutMe') ?>
-        <?php echo $form->field($model, 'password')->readOnlyPasswordField() ?>
-        <div class="row">
-            <div class="col-2">
-                <a href="/admin/users/<?=$model->id?>/change-password" class="mb-2 mt-4">Change Password</a>
-            </div>
-        </div>
+        <?php echo $form->field($model, 'password')->passwordField() ?>
+        <?php echo $form->field($model, 'passwordConfirm')->passwordField() ?>
         <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
     <?php Form::end() ?>
 </section>

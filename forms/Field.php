@@ -16,22 +16,38 @@ class Field extends BaseField
     public function __construct(Model $model, string $attribute)
     {
         $this->type = self::TYPE_TEXT;
+        $this->disabled = false;
         parent::__construct($model, $attribute);
     }
 
     public function renderInput()
     {
-        return sprintf('<input type="%s" class="form-control%s" name="%s" value="%s">',
+        return sprintf('<input type="%s" class="form-control%s" name="%s" value="%s" %s>',
             $this->type,
             $this->model->hasError($this->attribute) ? ' is-invalid' : '',
             $this->attribute,
             $this->model->{$this->attribute},
+            $this->disabled ? 'disabled="disabled"' : ''
         );
     }
 
     public function passwordField()
     {
         $this->type = self::TYPE_PASSWORD;
+        return $this;
+    }
+
+    public function readOnlyPasswordField()
+    {
+        $this->type = self::TYPE_PASSWORD;
+        $this->disabled = true;
+        return $this;
+    }
+
+    public function readOnlyField()
+    {
+        $this->type = self::TYPE_TEXT;
+        $this->disabled = true;
         return $this;
     }
 

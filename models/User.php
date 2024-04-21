@@ -49,6 +49,9 @@ class User extends UserModel
             "registeredAt",
             "isActive",
             "isSuperAdmin",
+            "aboutMe",
+            "birthday",
+            "reputation",
         ]);
     }
 
@@ -100,6 +103,8 @@ class User extends UserModel
             "isActive",
             "isSuperAdmin",
             "reputation",
+            "birthday",
+            "aboutMe",
         ]));
     }
 
@@ -110,7 +115,10 @@ class User extends UserModel
             'lastName' => 'Last name',
             'emailAddress' => 'Email Address',
             'password' => 'Password',
-            'passwordConfirm' => 'Password Confirm'
+            'passwordConfirm' => 'Password Confirm',
+            'aboutMe' => 'About Me',
+            'birthday' => 'Birthday',
+            'reputation' => 'Reputation',
         ];
     }
 
