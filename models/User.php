@@ -31,8 +31,8 @@ class User extends UserModel
     public string $lastName = '';
     public string $emailAddress = '';
     public int $reputation = 0;
-    public string $birthday = '';
-    public string $aboutMe = '';
+    public ?string $birthday = null;
+    public ?string $aboutMe = null;
     public string $password = '';
     public string $passwordConfirm = '';
     public int $isActive = self::BOOL_FALSE;
@@ -49,7 +49,6 @@ class User extends UserModel
             "registeredAt",
             "isActive",
             "isSuperAdmin",
-            "reputation"
         ]);
     }
 

@@ -11,6 +11,7 @@ class Field extends BaseField
     const TYPE_TEXT = 'text';
     const TYPE_PASSWORD = 'password';
     const TYPE_FILE = 'file';
+    const TYPE_DATE = 'date';
 
     public function __construct(Model $model, string $attribute)
     {
@@ -37,6 +38,12 @@ class Field extends BaseField
     public function fileField()
     {
         $this->type = self::TYPE_FILE;
+        return $this;
+    }
+
+    public function dateField()
+    {
+        $this->type = self::TYPE_DATE;
         return $this;
     }
 }

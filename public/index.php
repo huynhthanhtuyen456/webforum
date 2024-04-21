@@ -86,5 +86,13 @@ $app->router->post("admin/questions/{id}/edit", [AdminController::class, 'editQu
 $app->router->get("admin/questions/{id}/delete", [AdminController::class, 'deleteQuestion']);
 /* End Question Management */
 
+/* User Management */
+$app->router->get("admin/users/add", [AdminController::class, 'addUser']);
+$app->router->post("admin/users/add", [AdminController::class, 'addUser']);
+$app->router->get("admin/users/{id}/edit", [AdminController::class, 'editUser']);
+$app->router->post("admin/users/{id}/edit", [AdminController::class, 'editUser']);
+$app->router->get("admin/users/{id}/delete", [AdminController::class, 'deleteUser']);
+/* End User Management */
+
 /* End Definition Admin Path for Data Management */
 $app->run();

@@ -5,6 +5,7 @@ use MVC\Core\Application;
 use MVC\Core\Controller;
 use MVC\Core\Request;
 use MVC\Helpers\Common;
+use MVC\Forms\EditUserModelForm;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
@@ -126,7 +127,7 @@ class AdminController extends Controller
 
         return $this->render('adminEditModule', [
             'model' => $module
-        ], "Add Module");
+        ], "Edit Module");
     }
 
     public function deleteModule(Request $request)
@@ -215,6 +216,30 @@ class AdminController extends Controller
 
         $question->delete();
         Application::$app->response->redirect('/admin?tab=questions');
+    }
+
+    public function editUser(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $user = EditUserModelForm::findOne(["id" => $id]);
+        
+        if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $user->loadData($data);
+            $updateData = $user->getUpdateData();
+            if ($user->validate()) {
+                EditUserModelForm::update($updateData);
+                Application::$app->response->redirect('/admin?tab=users');
+            }
+        }
+
+        return $this->render('adminEditUser', [
+            'model' => $user
+        ], "Edit USer");
     }
 }
 ?>
