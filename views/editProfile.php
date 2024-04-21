@@ -27,7 +27,6 @@ $form = new Form();
         </div>
         <?php echo $form->field($model, 'emailAddress') ?>
         <?php echo $form->textAreaField($model, 'aboutMe') ?>
-        <?php echo $form->field($model, 'password')->readOnlyPasswordField() ?>
         <div class="row">
             <div class="col-2">
                 <a href="/profile/change-password" class="mb-2 mt-4">Change Password</a>

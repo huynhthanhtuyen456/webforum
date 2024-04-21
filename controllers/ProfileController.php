@@ -5,7 +5,7 @@ use MVC\Core\Application;
 use MVC\Core\Controller;
 use MVC\Core\Request;
 use MVC\Helpers\Common;
-use MVC\Forms\EditUserModelForm;
+use MVC\Forms\EditProfileForm;
 use MVC\Forms\ChangeUserPasswordForm;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
@@ -72,7 +72,7 @@ class ProfileController extends Controller
     public function editProfile(Request $request)
     {
         $id = (int)$request->getRouteParam($param="id");
-        $user = EditUserModelForm::findOne(["id" => $this->me->id]);
+        $user = EditProfileForm::findOne(["id" => $this->me->id]);
         
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
         
@@ -85,7 +85,7 @@ class ProfileController extends Controller
             $user->loadData($data);
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
-                EditUserModelForm::update($updateData);
+                EditProfileForm::update($updateData);
                 Application::$app->response->redirect('/profile');
             }
         }

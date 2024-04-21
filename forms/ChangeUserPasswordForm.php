@@ -3,10 +3,11 @@ namespace MVC\Forms;
 
 
 use MVC\Core\Application;
-use MVC\Models\User;
+use MVC\Db\DbModel;
+use MVC\Helpers\Constants;
 
 
-class ChangeUserPasswordForm extends User
+class ChangeUserPasswordForm extends DbModel
 {
     public int $id = 0;
     public string $password = '';
@@ -19,6 +20,11 @@ class ChangeUserPasswordForm extends User
         $this->extendAttributes([
             'password',
         ]);
+    }
+
+    public static function tableName(): string
+    {
+        return Constants::$USER_TABLE;
     }
 
     public static function dbFields(): string
