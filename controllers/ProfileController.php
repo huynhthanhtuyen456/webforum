@@ -6,6 +6,7 @@ use MVC\Core\Controller;
 use MVC\Core\Request;
 use MVC\Helpers\Common;
 use MVC\Forms\EditUserModelForm;
+use MVC\Forms\ChangeUserPasswordForm;
 use MVC\Middlewares\AuthMiddleware;
 use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
@@ -92,6 +93,35 @@ class ProfileController extends Controller
         return $this->render('editProfile', [
             'model' => $user
         ], "Edit Profile");
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = new ChangeUserPasswordForm();
+        
+        if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            if (!password_verify($data["oldPassword"], $this->me->password)) {
+                $user->addError("oldPassword", "Password is incorrect!");
+                return $this->render('profileChangePassword', [
+                    'model' => $user
+                ], "Change Password");
+            }
+            $user->loadData($data);
+            $user->id = $this->me->id;
+            if ($user->validate()) {
+                $user->password = password_hash($user->newPassword, PASSWORD_DEFAULT);
+                $updateData = $user->getUpdateData();
+                ChangeUserPasswordForm::update($updateData);
+                Application::$app->response->redirect('/profile');
+            }
+        }
+
+        return $this->render('profileChangePassword', [
+            'model' => $user
+        ], "Change Password");
     }
 
     public function addContact(Request $request)

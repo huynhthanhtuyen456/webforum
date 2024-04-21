@@ -67,6 +67,8 @@ $app->router->get("logout", [AuthController::class, 'logout']);
 
 /* Profile Management */
 $app->router->get("profile", [ProfileController::class, 'index']);
+$app->router->get("profile/change-password", [ProfileController::class, 'changePassword']);
+$app->router->post("profile/change-password", [ProfileController::class, 'changePassword']);
 $app->router->get("profile/edit", [ProfileController::class, 'editProfile']);
 $app->router->post("profile/edit", [ProfileController::class, 'editProfile']);
 $app->router->get("profile/contacts/add", [ProfileController::class, 'addContact']);
