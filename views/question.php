@@ -1,6 +1,7 @@
 <?php
 use MVC\Core\Application;
 use MVC\Models\User;
+use MVC\Models\Answer;
 use MVC\Forms\Form;
 
 $user = Application::isLogined();
@@ -76,13 +77,18 @@ if ($user) {
                         }
                     ?>
 
-                    <a class="list-group-item list-group-item-action" aria-current="true">
+                    <div class="list-group-item list-group-item-action" aria-current="true">
                         <div class="d-flex w-100 justify-content-between">
-                        <p class="fw-bolder mb-1 text-break"><?=User::findOne(['id' => $item["authorID"]])->getDisplayName();?></p>
-                        <small><?=$intervalCreatedDay?></small>
+                            <p class="fw-bolder mb-1 text-break">
+                                <?=User::findOne(['id' => $item["authorID"]])->getDisplayName();?>  
+                                <a href="/profile/answers/<?=Answer::findOne(["authorID" => $item["authorID"], "questionID" =>$model->id])->id?>/edit">
+                                    <img src="/images/icon/pen.svg">
+                                </a>
+                            </p>
+                            <small><?=$intervalCreatedDay?></small>
                         </div>
                         <p class="mb-1 text-break fst-italic"><?=$item["answer"]?></p>
-                    </a>
+                    </div>
                 <?php endforeach ?>
             </div>
         </div>
