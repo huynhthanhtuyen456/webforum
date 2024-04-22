@@ -5,11 +5,13 @@ enum Tab: string
     case AboutMe = "aboutMe";
     case Questions = "questions";
     case Contacts = "contacts";
+    case Answers = "answers";
 }
 ?>
 
 <?php  
     use MVC\Core\Application; 
+    use MVC\Models\Question;
     $user = Application::$app->user;
 ?>
 
@@ -18,6 +20,13 @@ enum Tab: string
     if (Application::$app->session->getFlash('success')): ?>
         <div class="alert alert-success alert-dismissible fade show">
             <p><?=Application::$app->session->getFlash('success')?></p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+<?php endif; ?>
+<?php
+    if (Application::$app->session->getFlash('editAnswerfailed')): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <p><?=Application::$app->session->getFlash('editAnswerfailed')?></p>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 <?php endif; ?>
@@ -35,6 +44,9 @@ enum Tab: string
             </li>
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Contacts->value ? 'active' : ''?>" href="/profile?tab=contacts&page=1">My Contacts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Answers->value ? 'active' : ''?>" href="/profile?tab=answers&page=1">My Answers</a>
             </li>
         </ul>
     </div>
@@ -174,16 +186,19 @@ enum Tab: string
                                 </div>
                             <?php endif ?>       
                         <?php endforeach ?>
-                        <div class="container">
-                            <?php for($i; $i < $totalPageQuestions; ++$i):  ?>
-                                <a href="/profile?tab=<?=Tab::Questions->value?>&page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-                            <?php endfor ?>
-                        </div>
+                        <?php if($totalPageQuestions > 1): ?>
+                            <div class="container">
+                                <?php for($i; $i < $totalPageQuestions; ++$i):  ?>
+                                    <a href="/profile?tab=<?=Tab::Questions->value?>&page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+                                <?php endfor ?>
+                            </div>
+                        <?php endif ?>
                     </div>
                 <?php else: ?>
                     <p class="text-center">No Content.</p>
                 <?php endif ?>
             </div>
+
             <div class="table-responsive tab-pane <?=$tab == Tab::Contacts->value ? 'active' : ''?>" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
                 <table class="table table-hover">
                     <thead>
@@ -247,6 +262,88 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
+                            <?php if($totalPageContacts > 1): ?>
+                                <div class="container">
+                                    <?php for($i; $i < $totalPageContacts; ++$i):  ?>
+                                        <a href="/profile?tab=<?=Tab::Contacts->value?>&page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+                                    <?php endfor ?>
+                                </div>
+                            <?php endif ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                            </td>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive tab-pane <?=$tab == Tab::Answers->value ? 'active' : ''?>" id="answers" role="tabpanel" aria-labelledby="answers-tab">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Question</th>
+                            <th scope="col">Answer</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Updated At</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        <?php if($totalPageAnswers > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total answers: <?=$totalAnswers?> <?=$totalPageAnswers > 0 ? "| Page:" : ""?> 
+                                    <?php for($answerPageIndex; $answerPageIndex < $totalPageAnswers; ++$answerPageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$answerPageIndex+1?>&tab=answers" 
+                                            class="text-decoration-none <?=$currentPage == $answerPageIndex+1 ? 'text-dark' : '' ?>">
+                                            <?=$answerPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
+                    </thead>
+                    <tbody>
+                        <?php if($answers): ?>
+                            <?php 
+                                foreach ($answers as $answer):
+                                    $q = Question::findOne(["id" => $answer["questionID"]])
+                            ?>
+                                <tr>
+                                    <td><a href="/question/<?=$q->id?>"><?=$q->thread?></a></td>
+                                    <td><?=$answer["answer"]?></td>
+                                    <td><?=$answer["createdAt"]?></td>
+                                    <td><?=$answer["updatedAt"]?></td>
+                                    <td>
+                                        <a href="/profile/answers/<?=$answer["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteAnswer<?=$answer["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                    </td>
+                                </tr>
+                                <div class="modal" id="deleteAnswer<?=$answer["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Answer!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this answer?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/profile/answers/<?=$answer["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                            <?php if($totalPageAnswers > 1): ?>
+                                <div class="container">
+                                    <?php for($i; $i < $totalPageAnswers; ++$i):  ?>
+                                        <a href="/profile?tab=<?=Tab::Answers->value?>&page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+                                    <?php endfor ?>
+                                </div>
+                            <?php endif ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>

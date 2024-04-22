@@ -13,6 +13,7 @@ use MVC\Models\Question;
 use MVC\Models\Module;
 use MVC\Models\User;
 use MVC\Models\Contact;
+use MVC\Models\Answer;
 use MVC\Exceptions\BadRequestException;
 
 
@@ -26,6 +27,8 @@ class ProfileController extends Controller
             'editContact',
             'deleteContact',
             'editProfile',
+            'editAnswer',
+            'deleteAnswer',
         ]));
         $this->limit = 10;
         $this->me = Application::$app->user;
@@ -45,7 +48,7 @@ class ProfileController extends Controller
         }
         $tab = isset($_GET["tab"]) ? $_GET["tab"] : "profile";
         
-        if (!in_array($tab, ['profile', 'aboutMe', 'questions', 'contacts'])) throw new BadRequestException("Invalid tab query param!");
+        if (!in_array($tab, ['profile', 'aboutMe', 'questions', 'contacts', 'answers'])) throw new BadRequestException("Invalid tab query param!");
 
         $questions = Question::findAll(['authorID' => $this->me->id, 'isActive' => Question::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
         $totalQuestions = Question::countAll(['isActive' => Question::BOOL_TRUE, 'authorID' => $this->me->id]);
@@ -55,6 +58,10 @@ class ProfileController extends Controller
         $totalContacts = Contact::countAll(["emailAddress" => $this->emailAddress]);
         $totalPageContacts = ceil($totalContacts / $this->getLimit());
 
+        $answers = Answer::findAll(['authorID' => $this->me->id, 'isActive' => Answer::BOOL_TRUE], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
+        $totalAnswers = Answer::countAll(['authorID' => $this->me->id, 'isActive' => Answer::BOOL_TRUE]);
+        $totalPageAnswers = ceil($totalContacts / $this->getLimit());
+
         return $this->render($view='profile', $params=[
             "questions" => $questions,
             "totalQuestions" => $totalQuestions,
@@ -63,6 +70,10 @@ class ProfileController extends Controller
             "contacts" => $contacts,
             "totalContacts" => $totalContacts,
             "totalPageContacts" => $totalPageContacts,
+
+            "answers" => $answers,
+            "totalAnswers" => $totalAnswers,
+            "totalPageAnswers" => $totalPageAnswers,
 
             "currentPage" => $this->currentPage,
             "tab" => $tab,
@@ -183,9 +194,60 @@ class ProfileController extends Controller
 
         if (!$contact) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
 
-        $contact->delete();
+        $contact->isActive = Contact::BOOL_FALSE;
+        $contact->setUpdatedAt("now");
+        $updateData = $contact->getUpdateData();
+        Contact::update($updateData);
         Application::$app->session->setFlash('success', 'Your contact was deleted successfully!');
         Application::$app->response->redirect('/profile?tab=contacts');
+    }
+
+    public function editAnswer(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $answer = Answer::findOne(["id" => $id, "authorID" => $this->me->id]);
+        if ($answer->authorID != $this->me->id) throw new \MVC\Exceptions\BadRequestException("You are not author of this answer!");
+        $question = Question::findOne(["id" => $answer->questionID, "isActive" => Question::BOOL_TRUE]);
+
+        if (!$question) {
+            Application::$app->session->setFlash('editAnswerfailed', 'You cannot answer for this question because it was deleted!');
+            Application::$app->response->redirect('/profile?tab=answers');            
+        }
+        
+        if (!$answer) throw new \MVC\Exceptions\BadRequestException("Not Found Contact!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $answer->loadData($data);
+            if ($answer->validate()) {
+                $answer->setUpdatedAt("now");
+                $updateData = $answer->getUpdateData();
+                Answer::update($updateData);
+                Application::$app->session->setFlash('success', 'Your answer was updated successfully!');
+                Application::$app->response->redirect('/question/'.$answer->questionID);
+            }
+        }
+
+        return $this->render('profileEditAnswer', [
+            'model' => $answer
+        ], "Edit Answer");
+    }
+
+    public function deleteAnswer(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $answer = Answer::findOne(["id" => $id, "authorID" => $this->me->id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$answer) throw new \MVC\Exceptions\BadRequestException("Not Found This Contact!");
+
+        $answer->isActive = Answer::BOOL_FALSE;
+        $answer->setUpdatedAt("now");
+        $updateData = $answer->getUpdateData();
+        Answer::update($updateData);
+        Application::$app->session->setFlash('success', 'Your answer was deleted successfully!');
+        Application::$app->response->redirect('/profile?tab=answers');
     }
 }
 ?>

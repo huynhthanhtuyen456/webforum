@@ -1,6 +1,7 @@
 <?php
     use MVC\Core\Application;
     use MVC\Helpers\Permissions;
+    use MVC\Models\Question;
     $user = Application::$app->user;
     $this->title = 'Admin Dashboard';
     enum Tab: string
@@ -11,6 +12,7 @@
         case Contact = "contacts";
         case Role = "roles";
         case Permission = "permissions";
+        case Answer = "answers";
     }
 ?>
 
@@ -26,6 +28,9 @@
         <ul class="nav nav-tabs card-header-tabs" id="bologna-list" role="tablist">
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Question->value ? 'active' : ''?>" href="/admin?tab=questions&page=1">Questions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Answer->value ? 'active' : ''?>" href="/admin?tab=answers&page=1">Answers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Module->value ? 'active' : ''?>"  href="/admin?tab=modules&page=1">Modules</a>
@@ -135,7 +140,84 @@
                     </tbody>
                 </table>
             </div>
-                
+
+            <div class="table-responsive tab-pane <?=$tab == Tab::Answer->value ? 'active' : ''?>" id="answers" role="tabpanel" aria-labelledby="answers-tab">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Question</th>
+                            <th scope="col">Answer</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Updated At</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        <?php if($totalPageAnswers > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total contacts: <?=$totalAnswers?> <?=$totalPageAnswers > 0 ? "| Page:" : ""?> 
+                                    <?php for($answerPageIndex; $answerPageIndex < $totalPageAnswers; ++$answerPageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$answerPageIndex+1?>&tab=answers" 
+                                            class="text-decoration-none <?=$currentPage == $answerPageIndex+1 ? 'text-dark' : '' ?>">
+                                            <?=$answerPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
+                    </thead>
+                    <tbody>
+                        <?php if($answers): ?>
+                            <?php 
+                                foreach ($answers as $answer):
+                                    $qa = Question::findOne(["id" => $answer["questionID"]]);
+                                    $author = User::findOne(["id" => $answer["authorID"]]);
+                            ?>
+                                <tr>
+                                    <td><a href="/admin/questions/<?=$qa->id?>/edit"><?=$qa->thread?></a></td>
+                                    <td><a href="/admin/answers/<?=$answer["id"]?>/edit"><?=$answer["answer"]?></a></td>
+                                    <td><?=$author->getDisplayName()?></td>
+                                    <td><?=$answer["isActive"] ? "Active" : "Inactive"?></td>
+                                    <td><?=$answer["createdAt"]?></td>
+                                    <td><?=$answer["updatedAt"]?></td>
+                                    <td>
+                                        <a href="/admin/answers/<?=$answer["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                        <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_ANSWER) || Application::$app->user->isSuperAdmin): ?>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteAnswer<?=$answer["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                        <?php endif ?>
+                                    </td>
+                                </tr>
+                                <div class="modal" id="deleteAnswer<?=$answer["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Answer!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this answer?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_ANSWER) || Application::$app->user->isSuperAdmin): ?>
+                                                <a href="/admin/answers/<?=$answer["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php endif ?>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                            </td>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>            
+
             <div class="table-responsive tab-pane <?=$tab == Tab::Module->value ? 'active' : ''?>" id="modules" role="tabpanel" aria-labelledby="modules-tab">
                 <table class="table table-hover">
                     <thead>

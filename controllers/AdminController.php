@@ -16,6 +16,7 @@ use MVC\Models\Contact;
 use MVC\Models\Role;
 use MVC\Models\Permission;
 use MVC\Models\PrivilegedUser;
+use MVC\Models\Answer;
 use MVC\Exceptions\BadRequestException;
 
 
@@ -85,7 +86,7 @@ class AdminController extends Controller
         }
         $tab = isset($_GET["tab"]) ? $_GET["tab"] : "questions";
         
-        if (!in_array($tab, ['questions', 'modules', 'users', 'contacts', 'roles', 'permissions'])) throw new BadRequestException("Invalid tab query param!");
+        if (!in_array($tab, ['questions', 'modules', 'users', 'contacts', 'roles', 'permissions', 'answers'])) throw new BadRequestException("Invalid tab query param!");
 
         $questions = Question::findAll([], $this->getLimit(), $this->getPageOffset());
         $totalQuestions = Question::countAll([]);
@@ -111,6 +112,10 @@ class AdminController extends Controller
         $totalPermissions = Permission::countAll();
         $totalPagePermissions = ceil($totalPermissions / $this->getLimit());
 
+        $answers = Answer::findAll([], $this->getLimit(), $this->getPageOffset());
+        $totalAnswers = Answer::countAll();
+        $totalPageAnswers = ceil($totaltotalAnswersPermissions / $this->getLimit());
+
         return $this->render($view='admin', $params=[
             "questions" => $questions,
             "totalQuestions" => $totalQuestions,
@@ -135,6 +140,10 @@ class AdminController extends Controller
             "permissions" => $permissions,
             "totalPermissions" => $totalPermissions,
             "totalPagePermissions" => $totalPagePermissions,
+
+            "answers" => $answers,
+            "totalAnswers" => $totalAnswers,
+            "totalPageAnswers" => $totalPageAnswers,
 
             "currentPage" => $this->currentPage,
             "tab" => $tab,
@@ -570,6 +579,44 @@ class AdminController extends Controller
         $permission->delete();
         Application::$app->session->setFlash('success', 'The permission ID='.$permission->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=permissions');
+    }
+
+    public function editAnswer(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $answer = Answer::findOne(["id" => $id]);
+        
+        if (!$answer) throw new \MVC\Exceptions\BadRequestException("Not Found Answer!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $answer->loadData($data);
+            if ($answer->validate()) {
+                $answer->setUpdatedAt("now");
+                $updateData = $answer->getUpdateData();
+                Answer::update($updateData);
+                Application::$app->session->setFlash('success', 'The answer ID='.$answer->id.' was updated successfully!');
+                Application::$app->response->redirect('/admin?tab=answers');
+            }
+        }
+
+        return $this->render('adminEditAnswer', [
+            'model' => $answer
+        ], "Edit Answer");
+    }
+
+    public function deleteAnswer(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $answer = Answer::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$answer) throw new \MVC\Exceptions\BadRequestException("Not Found This Answer!");
+
+        $answer->delete();
+        Application::$app->session->setFlash('success', 'The answer ID='.$answer->id.' was deleted successfully!');
+        Application::$app->response->redirect('/admin?tab=answers');
     }
 }
 ?>
