@@ -3,10 +3,10 @@
         <h2>Modules - Total Modules: <?php echo $totalModules ?></h2>
     </div>
     <div class="row m-4">
-        <div class="col-2">
+        <div class="col-6">
             <?php foreach($modules as $module): ?>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="/questions?moduleID=<?=$module["id"]?>"><?=$module["name"]?></a></li>
+                    <li class="list-group-item mb-2"><a class="text-break" href="/questions?moduleID=<?=$module["id"]?>"><?=$module["name"]?></a></li>
                 </ul>
             <?php endforeach ?>
         </div>
