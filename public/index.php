@@ -105,6 +105,12 @@ $app->router->post("admin/questions/{id}/edit", [AdminController::class, 'editQu
 $app->router->get("admin/questions/{id}/delete", [AdminController::class, 'deleteQuestion']);
 /* End Question Management */
 
+/* Answers Management */
+$app->router->get("admin/answers/{id}/edit", [AdminController::class, 'editAnswer']);
+$app->router->post("admin/answers/{id}/edit", [AdminController::class, 'editAnswer']);
+$app->router->get("admin/answers/{id}/delete", [AdminController::class, 'deleteAnswer']);
+/* End Answers Management */
+
 /* User Management */
 $app->router->get("admin/users/add", [AdminController::class, 'addUser']);
 $app->router->post("admin/users/add", [AdminController::class, 'addUser']);
@@ -131,13 +137,13 @@ $app->router->post("admin/roles/{id}/edit", [AdminController::class, 'editRole']
 $app->router->get("admin/roles/{id}/delete", [AdminController::class, 'deleteRole']);
 /* End Role Management */
 
-/* Role Management */
+/* Permission Management */
 $app->router->get("admin/permissions/add", [AdminController::class, 'addPermission']);
 $app->router->post("admin/permissions/add", [AdminController::class, 'addPermission']);
 $app->router->get("admin/permissions/{id}/edit", [AdminController::class, 'editPermission']);
 $app->router->post("admin/permissions/{id}/edit", [AdminController::class, 'editPermission']);
 $app->router->get("admin/permissions/{id}/delete", [AdminController::class, 'deletePermission']);
-/* End Role Management */
+/* End Permission Management */
 
 /* End Definition Admin Path for Data Management */
 $app->run();

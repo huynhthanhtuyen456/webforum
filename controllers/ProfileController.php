@@ -206,7 +206,7 @@ class ProfileController extends Controller
     {
         $id = (int)$request->getRouteParam($param="id");
         $answer = Answer::findOne(["id" => $id, "authorID" => $this->me->id]);
-        if ($answer->id != $this->me->id) throw new \MVC\Exceptions\BadRequestException("You are not author of this answer!");
+        if ($answer->authorID != $this->me->id) throw new \MVC\Exceptions\BadRequestException("You are not author of this answer!");
         $question = Question::findOne(["id" => $answer->questionID, "isActive" => Question::BOOL_TRUE]);
 
         if (!$question) {
