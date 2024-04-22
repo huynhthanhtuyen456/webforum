@@ -454,7 +454,7 @@ enum Tab: string
                             <?php foreach ($permissions as $permission): ?>
                                 <tr>
                                     <td><a href="/admin/permissions/<?=$permission["id"]?>/edit"><?=$permission["perm"]?></a></td>
-                                    <td><?=$question["isActive"] ? "Active" : "Inactive" ?></td>
+                                    <td><?=$permission["isActive"] ? "Active" : "Inactive" ?></td>
                                     <td><?=$permission["createdAt"]?></td>
                                     <td><?=$permission["updatedAt"]?></td>
                                     <td>
