@@ -51,7 +51,6 @@ class PrivilegedUser extends User
         $statement->execute();
         while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $this->roles[$row["name"]] = Role::getRolePermsByRoleID($row["roleID"]);
-            $this->roles[$row["roleID"]] = true;
         }
     }
 

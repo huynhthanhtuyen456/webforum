@@ -21,6 +21,11 @@ class Permissions
     public static string $EDIT_CONTACT = "editContact";
     public static string $DELETE_CONTACT = "deleteContact";
 
+    public static string $ADD_MODULE = "addModule";
+    public static string $GET_MODULE = "getModule";
+    public static string $EDIT_MODULE = "editModule";
+    public static string $DELETE_MODULE = "deleteModule";
+
     public static string $ADD_USER = "addUser";
     public static string $GET_USER = "getUser";
     public static string $EDIT_USER = "editUser";
