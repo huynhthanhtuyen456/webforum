@@ -6,7 +6,7 @@ use MVC\Core\Request;
 use MVC\Core\Response;
 use MVC\Core\Application;
 use MVC\Models\Question;
-use MVC\Models\User;
+use MVC\Models\Module;
 
 
 class SearchQuestionsController extends Controller
@@ -24,9 +24,21 @@ class SearchQuestionsController extends Controller
             }
         }
         $query = isset($_GET["query"]) ? $_GET["query"] : "";
-        $questions = Question::search($query=$query, ["isActive" => Question::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
+        $moduleID = isset($_GET["moduleID"]) ? $_GET["moduleID"] : null;
+
+        $filters = ["isActive" => Question::BOOL_TRUE];
+
+        if ($moduleID) $filters = array_merge(["moduleID" => $moduleID], $filters);
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
+        $questions = Question::search(
+            $query=$query,
+            $filters,
+            $this->getLimit(),
+            $this->getPageOffset()
+        );
         return $this->render('search', [
-            "questions" => $questions
+            "questions" => $questions,
+            "modules" => $modules,
         ], "Search");
     }
 }

@@ -105,7 +105,7 @@ class Question extends TimestampModel
         
         $fields = static::dbFields();
 
-        $prepare_stmt = "SELECT $fields FROM $tableName WHERE `thread` LIKE :query OR `content` LIKE :query ";
+        $prepare_stmt = "SELECT $fields FROM $tableName WHERE (`thread` LIKE :query OR `content` LIKE :query) ";
 
         $prepare_stmt = $where ? $prepare_stmt."AND $sql " : $prepare_stmt;
 

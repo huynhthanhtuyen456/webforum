@@ -2,12 +2,26 @@
     use MVC\Models\User;
 ?>
 <div class="container m-4">
-    <div class="row">
-        <form class="d-flex me-2">
-            <input class="form-control me-2" type="search" placeholder="Search" name="query" aria-label="Search">
-            <button class="btn btn-outline-dark" type="submit">Search</button>
-        </form>
-    </div>
+    <form class="me-2">
+        <div class="row">
+            <div class="col-8">
+                <input class="form-control" type="search" placeholder="Search" name="query" aria-label="Search">
+            </div>
+            <div class="col-4">
+                <button class="btn btn-outline-dark" type="submit">Search</button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4">
+                <select class="form-select" class="form-select" aria-label="Default select example" name="moduleID">
+                    <option value="" selected>Select A Module</option>
+                    <?php foreach($modules as $module): ?>
+                        <option value="<?=$module['id']?>"><?=$module['name']?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </form>
     <?php if($questions): ?>
         <div class="row m-4">
             <?php
