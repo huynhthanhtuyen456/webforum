@@ -476,8 +476,63 @@ class AdminController extends Controller
             Role::deleteRolePermissions($role->id, $id);
         }
         $role->delete();
-        Application::$app->session->setFlash('success', 'The contact ID='.$contact->id.' was deleted successfully!');
+        Application::$app->session->setFlash('success', 'The contact ID='.$role->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=roles');
+    }
+
+    public function addPermission(Request $request)
+    {
+        $permission = new Permission();
+        
+        if ($request->isPost()) {
+            $permission->loadData($request->getBody());
+            if ($permission->validate() && $permission->save()) {
+                Application::$app->session->setFlash('success', 'A new permission was added successfully!');
+                Application::$app->response->redirect('/admin?tab=permissions');
+            }
+        }
+
+        return $this->render('adminAddPermission', [
+            'model' => $permission
+        ], "Add Permission");
+    }
+
+    public function editPermission(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $permission = Permission::findOne(["id" => $id]);
+        
+        if (!$permission) throw new \MVC\Exceptions\BadRequestException("Not Found Permission!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? Permission::BOOL_TRUE : Permission::BOOL_FALSE;
+            $permission->loadData($data);
+            $updateData = $permission->getUpdateData();
+            if ($permission->validate()) {
+                Permission::update($updateData);
+                Application::$app->session->setFlash('success', 'The '.$permission->perm.' permission was updated successfully!');
+                Application::$app->response->redirect('/admin?tab=modules');
+            }
+        }
+
+        return $this->render('adminEditPermission', [
+            'model' => $permission
+        ], "Edit Permission");
+    }
+
+    public function deletePermission(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $permission = Permission::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$permission) throw new \MVC\Exceptions\BadRequestException("Not Found Your Permission!");
+
+        $permission->delete();
+        Application::$app->session->setFlash('success', 'The permission ID='.$permission->id.' was deleted successfully!');
+        Application::$app->response->redirect('/admin?tab=permissions');
     }
 }
 ?>

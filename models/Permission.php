@@ -22,7 +22,7 @@ class Permission extends TimestampModel
     public string $perm = '';
     public int $isActive = self::BOOL_FALSE;
 
-    protected function __construct() {
+    public function __construct() {
         $this->extendAttributes([
             'perm',
             'isActive',
