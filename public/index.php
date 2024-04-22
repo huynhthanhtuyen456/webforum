@@ -80,6 +80,9 @@ $app->router->post("profile/contacts/add", [ProfileController::class, 'addContac
 $app->router->get("profile/contacts/{id}/edit", [ProfileController::class, 'editContact']);
 $app->router->post("profile/contacts/{id}/edit", [ProfileController::class, 'editContact']);
 $app->router->get("profile/contacts/{id}/delete", [ProfileController::class, 'deleteContact']);
+$app->router->get("profile/answers/{id}/edit", [ProfileController::class, 'editAnswer']);
+$app->router->post("profile/answers/{id}/edit", [ProfileController::class, 'editAnswer']);
+$app->router->get("profile/answers/{id}/delete", [ProfileController::class, 'deleteAnswer']);
 /* End Define Profile Management */
 
 /* Define Admin Path for Data Management */
