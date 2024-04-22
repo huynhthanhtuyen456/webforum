@@ -19,10 +19,4 @@ class Constants
     public static string $MODULE_TABLE = "Module";
     public static string $CONTACT_TABLE = "Contact";
 }
-
-class Permissions
-{
-    public static string $CREATE_POST = "create_post";
-    public static string $UPDATE_POST = "update_post";
-}
 ?>

@@ -77,7 +77,8 @@ $permission_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$PERMISSION_TAB
     perm VARCHAR( 255 ) NOT NULL,
     isActive BOOLEAN NOT NULL,
     createdAt DATETIME NOT NULL,
-    updatedAt DATETIME NOT NULL
+    updatedAt DATETIME NOT NULL,
+    UNIQUE KEY `perm_unique` (`perm`)
     );
 ";
 array_push($sql_statements, $permission_table_sql);
@@ -91,7 +92,8 @@ $role_permission_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$ROLE_PERM
     permissionID INT NOT NULL,
     CONSTRAINT fkPermission
         FOREIGN KEY(permissionID) 
-        REFERENCES Permission(id) ON DELETE CASCADE
+        REFERENCES Permission(id) ON DELETE CASCADE,
+    UNIQUE KEY `role_perm_id` (`roleID`,`permissionID`)
     );
 ";
 array_push($sql_statements, $role_permission_table_sql);

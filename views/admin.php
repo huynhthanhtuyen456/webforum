@@ -39,6 +39,12 @@ enum Tab: string
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Contact->value ? 'active' : ''?>" href="/admin?tab=contacts&page=1">Contacts</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Role->value ? 'active' : ''?>" href="/admin?tab=roles&page=1">Roles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Permission->value ? 'active' : ''?>" href="/admin?tab=permissions&page=1">Permissions</a>
+            </li>
         </ul>
     </div>
     <div class="card-body">
@@ -342,6 +348,146 @@ enum Tab: string
                     </tbody>
                 </table>
             </div>            
+            
+            <div class="table-responsive tab-pane <?=$tab == Tab::Role->value ? 'active' : ''?>" id="roles" role="tabpanel" aria-labelledby="roles-tab">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Updated At</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/roles/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPageRoles > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total roles: <?=$totalRoles?> <?=$totalPageRoles > 0 ? "| Page:" : ""?> 
+                                    <?php for($rolePageIndex; $rolePageIndex < $totalPageRoles; ++$rolePageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$rolePageIndex+1?>&tab=roles" 
+                                            class="text-decoration-none <?=$currentPage == $rolePageIndex+1 ? 'text-dark' : '' ?>">
+                                            <?=$rolePageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
+                    </thead>
+                    <tbody>
+                        <?php if($roles): ?>
+                            <?php foreach ($roles as $role): ?>
+                                <tr>
+                                    <td><a href="/admin/roles/<?=$role["id"]?>/edit"><?=$role["name"]?></a></td>
+                                    <td><?=$question["isActive"] ? "Active" : "Inactive" ?></td>
+                                    <td><?=$role["createdAt"]?></td>
+                                    <td><?=$role["updatedAt"]?></td>
+                                    <td>
+                                        <a href="/admin/roles/<?=$role["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteRole<?=$role["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                    </td>
+                                </tr>
+                                <div class="modal" id="deleteRole<?=$role["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Role!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this role?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/roles/<?=$role["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                            </td>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive tab-pane <?=$tab == Tab::Permission->value ? 'active' : ''?>" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Updated At</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        <tr>
+                            <a role="button" class="btn btn-outline-primary" href="/admin/permissions/add">
+                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                            </a>
+                        </tr>
+                        <?php if($totalPagePermissions > 0): ?>
+                            <tr>
+                                <p class="mt-4">
+                                    Total permissions: <?=$totalPermissions?> <?=$totalPagePermissions > 0 ? "| Page:" : ""?> 
+                                    <?php for($permissionPageIndex; $permissionPageIndex < $totalPagePermissions; ++$permissionPageIndex): ?>
+                                        <a 
+                                            href="/admin?page=<?=$permissionPageIndex+1?>&tab=permissions" 
+                                            class="text-decoration-none <?=$currentPage == $permissionPageIndex+1 ? 'text-dark' : '' ?>">
+                                            <?=$permissionPageIndex+1?>
+                                        </a>
+                                    <?php endfor ?>
+                                </p>
+                            </tr>
+                        <?php endif ?>
+                    </thead>
+                    <tbody>
+                        <?php if($permissions): ?>
+                            <?php foreach ($permissions as $permission): ?>
+                                <tr>
+                                    <td><a href="/admin/permissions/<?=$permission["id"]?>/edit"><?=$permission["perm"]?></a></td>
+                                    <td><?=$question["isActive"] ? "Active" : "Inactive" ?></td>
+                                    <td><?=$permission["createdAt"]?></td>
+                                    <td><?=$permission["updatedAt"]?></td>
+                                    <td>
+                                        <a href="/admin/permissions/<?=$permission["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deletePermission<?=$permission["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                    </td>
+                                </tr>
+                                <div class="modal" id="deletePermission<?=$permission["id"]?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete This Permission!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete this permission?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                            <a href="/admin/permissions/<?=$permission["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                            </td>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
