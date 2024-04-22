@@ -1,4 +1,4 @@
-<div class="container-fluid p-2 m-2">
+<div class="container p-2 m-2">
     <div class="row">
         <h2>Questions - Total Questions: <?php echo $totalQuestions ?></h2>
     </div>
@@ -11,11 +11,9 @@
             ?>
                 <div class="col-6">
                     <a href="/question/<?php echo $item["id"] ?>">
-                        <h3><?php echo $item["thread"] ?></h3>
+                        <h3 class="text-break"><?php echo $item["thread"] ?></h3>
                         <?php if($item["image"]): ?>
-                            <div class="profile-picture">
-                                <img src="<?php echo $item["image"] ?>" alt="Profile Picture" class="img-fluid rounded" width="200" height="200">
-                            </div>
+                            <img src="<?php echo $item["image"] ?>" alt="Profile Picture" class="img-thumbnail bg-transparent">
                         <?php endif ?>
                     </a>
                     <?php
@@ -29,17 +27,17 @@
                             $intervalCreatedDay = $intervalCreatedDay == 1 ? $intervalCreatedDay." day" : $intervalCreatedDay." days";
                         }
                     ?>
-                    <p class="mt-4">Posted by: <?php $user = User::findOne(['id' => $item["authorID"]]); echo $user->getDisplayName(); ?> | Date: <?php echo $intervalCreatedDay ?></p>
-                    <p class="text-break"><?php echo $item["content"] ?></p>
+                    <p class="mt-4">
+                        Posted by: <?php $user = User::findOne(['id' => $item["authorID"]]); echo $user->getDisplayName(); ?> 
+                        | Date: <?php echo $intervalCreatedDay ?></p>
+                    <p class="text-break fst-italic"><?php echo $item["content"] ?></p>
                 </div>
                 <?php if ($nextItem): ?>
                     <div class="col-6">
                         <a href="/question/<?php echo $nextItem["id"] ?>">
-                            <h3><?php echo $nextItem["thread"] ?></h3>
+                            <h3 class="text-break"><?php echo $nextItem["thread"] ?></h3>
                             <?php if($item["image"]): ?>
-                                <div class="profile-picture">
-                                    <img src="<?php echo $nextItem["image"] ?>" alt="Profile Picture" class="img-fluid rounded" width="200" height="200">
-                                </div>
+                                <img src="<?php echo $nextItem["image"] ?>" alt="Profile Picture" class="img-thumbnail bg-transparent">
                             <?php endif ?>
                         </a>
                         <?php
@@ -56,7 +54,7 @@
                         <p class="mt-4">Posted by:
                             <?php $user = User::findOne(['id' => $nextItem["authorID"]]); echo $user->getDisplayName(); ?>
                             | Date: <?php echo $intervalCreatedDay ?></p>
-                        <p class="text-break"><?php echo $nextItem["content"] ?></p>
+                        <p class="text-break fst-italic"><?php echo $nextItem["content"] ?></p>
                     </div>
                 <?php endif ?>          
             <?php endforeach ?>

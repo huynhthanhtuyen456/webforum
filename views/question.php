@@ -30,7 +30,7 @@ if ($user) {
     <?php endif; ?>
     <?php if ($model->image): ?>
         <div class="row">
-            <img src="<?php echo $model->image ?>" alt="Profile Picture" class="img-fluid rounded" width="400" height="400">
+            <img src="<?php echo $model->image ?>" alt="Profile Picture" class="img-thumbnail rounded mx-auto d-block">
         </div>
     <?php endif ?>
     <div class="row">
@@ -78,10 +78,10 @@ if ($user) {
 
                     <a class="list-group-item list-group-item-action" aria-current="true">
                         <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"><?=User::findOne(['id' => $item["authorID"]])->getDisplayName();?></h5>
+                        <p class="fw-bolder mb-1 text-break"><?=User::findOne(['id' => $item["authorID"]])->getDisplayName();?></p>
                         <small><?=$intervalCreatedDay?></small>
                         </div>
-                        <p class="mb-1"><?=$item["answer"]?></p>
+                        <p class="mb-1 text-break fst-italic"><?=$item["answer"]?></p>
                     </a>
                 <?php endforeach ?>
             </div>
