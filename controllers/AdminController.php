@@ -37,6 +37,12 @@ class AdminController extends Controller
             'editContact',
             'deleteContact',
             'changePassword',
+            'addRole',
+            'editRole',
+            'deleteRole',
+            'addPermission',
+            'editPermission',
+            'deletePermission',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
@@ -53,6 +59,12 @@ class AdminController extends Controller
             'editContact',
             'deleteContact',
             'changePassword',
+            'addRole',
+            'editRole',
+            'deleteRole',
+            'addPermission',
+            'editPermission',
+            'deletePermission',
         ]));
         $this->limit = 10;
         $this->layout = "admin-base";
