@@ -4,6 +4,8 @@ namespace MVC\Forms;
 
 use MVC\Core\Application;
 use MVC\Models\User;
+use MVC\Models\Role;
+use MVC\Helpers\Constants;
 
 
 class EditUserModelForm extends User
@@ -19,6 +21,7 @@ class EditUserModelForm extends User
     public int $isSuperAdmin = self::BOOL_FALSE;
     public $loginedAt;
     public $registeredAt;
+    public ?array $roles;
 
     public function __construct()
     {
@@ -75,6 +78,34 @@ class EditUserModelForm extends User
                 'class' => self::class
             ]],
         ];
+    }
+
+    public static function getByID($id) {
+        $tableName = static::tableName();
+        $fields = static::dbFields();
+        $sql = "SELECT $fields FROM $tableName WHERE id = :id";
+        $statement = self::prepare($sql);
+        $statement->bindParam(":id", $id, \PDO::PARAM_INT);
+        $statement->execute();
+        $user = $statement->fetchObject(static::class);
+        $user->initRoles();
+        return $user;
+    }
+
+    protected function initRoles() {
+        $this->roles = array();
+        $userRoleTable = Constants::$USER_ROLE_TABLE;
+        $roleTable = Constants::$ROLE_TABLE;
+        $sql = "SELECT ur.roleID, r.name FROM $userRoleTable as ur
+                JOIN $roleTable as r ON r.id = ur.roleID
+                WHERE ur.userID = :id";
+        $statement = self::prepare($sql);
+        $statement->bindParam(":id", $this->id, \PDO::PARAM_INT);
+        $statement->execute();
+        while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $this->roles[$row["name"]] = Role::getRolePermsByRoleID($row["roleID"]);
+            $this->roles[$row["roleID"]] = true;
+        }
     }
 
     public function getDisplayName(): string

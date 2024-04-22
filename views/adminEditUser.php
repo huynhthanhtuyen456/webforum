@@ -47,6 +47,12 @@ $form = new Form();
                 <a href="/admin/users/<?=$model->id?>/change-password" class="mb-2 mt-4">Change Password</a>
             </div>
         </div>
+        <select class="form-select" aria-label="Default select example" name="role">
+            <option value="">No Having Any Role</option>
+            <?php foreach($roles as $role): ?>
+                <option value="<?=$role['id']?>" <?php echo isset($model->roles[$role["name"]]) ? "selected" : ""?> ><?=$role["name"]?></option>
+            <?php endforeach ?>
+        </select>
         <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
     <?php Form::end() ?>
 </section>

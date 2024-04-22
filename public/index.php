@@ -12,6 +12,7 @@ use MVC\Controllers\AuthController;
 use MVC\Controllers\ProfileController;
 use MVC\Controllers\SearchQuestionsController;
 use MVC\Models\User;
+use MVC\Models\PrivilegedUser;
 use MVC\Core\Application;
 use MVC\Core\DotEnv;
 
@@ -22,7 +23,7 @@ require_once __DIR__ . '/../autoload.php';
 (new DotEnv(__DIR__ . '/../.env'))->load();
 
 $config = [
-    'userClass' => \MVC\Models\User::class,
+    'userClass' => \MVC\Models\PrivilegedUser::class,
     'db' => [
         'dsn' => getenv('DB_DSN'),
         'user' => getenv('DB_USER'),
@@ -118,6 +119,22 @@ $app->router->get("admin/contacts/{id}/edit", [AdminController::class, 'editCont
 $app->router->post("admin/contacts/{id}/edit", [AdminController::class, 'editContact']);
 $app->router->get("admin/contacts/{id}/delete", [AdminController::class, 'deleteContact']);
 /* End User Management */
+
+/* Role Management */
+$app->router->get("admin/roles/add", [AdminController::class, 'addRole']);
+$app->router->post("admin/roles/add", [AdminController::class, 'addRole']);
+$app->router->get("admin/roles/{id}/edit", [AdminController::class, 'editRole']);
+$app->router->post("admin/roles/{id}/edit", [AdminController::class, 'editRole']);
+$app->router->get("admin/roles/{id}/delete", [AdminController::class, 'deleteRole']);
+/* End Role Management */
+
+/* Role Management */
+$app->router->get("admin/permissions/add", [AdminController::class, 'addPermission']);
+$app->router->post("admin/permissions/add", [AdminController::class, 'addPermission']);
+$app->router->get("admin/permissions/{id}/edit", [AdminController::class, 'editPermission']);
+$app->router->post("admin/permissions/{id}/edit", [AdminController::class, 'editPermission']);
+$app->router->get("admin/permissions/{id}/delete", [AdminController::class, 'deletePermission']);
+/* End Role Management */
 
 /* End Definition Admin Path for Data Management */
 $app->run();

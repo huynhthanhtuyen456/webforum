@@ -5,9 +5,8 @@ $isGuest = Application::isGuest();
 
 if (!$isGuest) {
     $userDisplayName =  Application::$app->user->getDisplayName();
-    $isSuperAdmin = Application::$app->user->isSuperAdmin;
-    $meUrl = $isSuperAdmin ? "admin" : "profile";
-    $meTitle = $isSuperAdmin ? "Admin": "Profile";
+    $hasAdminAccess = Application::isAdminAccess();
+    echo $hasAdminAccess;
 }
 
 ?>
@@ -166,7 +165,10 @@ if (!$isGuest) {
                 <a class="btn btn-outline-light me-2" href="/login">Login</a>
                 <a class="btn btn-outline-light" href="/register">Register</a>
             <?php else: ?>
-                <a class="btn btn-outline-light me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
+                <a class="btn btn-outline-light me-2" href="/profile">Profile</a>
+                <?php if($hasAdminAccess): ?>
+                    <a class="btn btn-outline-light me-2" href="/admin">Admin</a>
+                <?php endif ?>
                 <a class="btn btn-outline-light me-2" href="/logout">Welcome <?php echo $userDisplayName; ?>(Logout)</a>
             <?php endif; ?>
         </nav>

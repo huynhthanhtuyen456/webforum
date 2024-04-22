@@ -43,7 +43,7 @@ class Application
         $userId = Application::$app->session->get('user');
         if ($userId) {
             $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::findOne([$key => $userId]);
+            $this->user = $this->userClass::getByID($userId);
         }
     }
 
@@ -102,5 +102,10 @@ class Application
     public function on($eventName, $callback)
     {
         $this->eventListeners[$eventName][] = $callback;
+    }
+
+    public static function isAdminAccess ()
+    {
+        return self::$app->user->hasRole("Moderator") || self::$app->user->hasRole("Editor") ||  self::$app->user->hasRole("Admin") || self::$app->user->isSuperAdmin;
     }
 }

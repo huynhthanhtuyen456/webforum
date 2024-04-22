@@ -1,20 +1,17 @@
 <?php
-
-$this->title = 'Admin Dashboard';
-enum Tab: string
-{
-    case Question = "questions";
-    case Module = "modules";
-    case User = "users";
-    case Contact = "contacts";
-    case Role = "roles";
-    case Permission = "permissions";
-}
-?>
-
-<?php  
-    use MVC\Core\Application; 
+    use MVC\Core\Application;
+    use MVC\Helpers\Permissions;
     $user = Application::$app->user;
+    $this->title = 'Admin Dashboard';
+    enum Tab: string
+    {
+        case Question = "questions";
+        case Module = "modules";
+        case User = "users";
+        case Contact = "contacts";
+        case Role = "roles";
+        case Permission = "permissions";
+    }
 ?>
 
 <h1>Admin Dashboard</h1>
@@ -33,12 +30,22 @@ enum Tab: string
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Module->value ? 'active' : ''?>"  href="/admin?tab=modules&page=1">Modules</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link <?=$tab == Tab::User->value ? 'active' : ''?>" href="/admin?tab=users&page=1">Users</a>
-            </li>
+            <?php if(Application::$app->user->hasRole("Admin") || Application::$app->user->hasRole("Moderator") || Application::$app->user->isSuperAdmin): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?=$tab == Tab::User->value ? 'active' : ''?>" href="/admin?tab=users&page=1">Users</a>
+                </li>
+            <?php endif ?>
             <li class="nav-item">
                 <a class="nav-link <?=$tab == Tab::Contact->value ? 'active' : ''?>" href="/admin?tab=contacts&page=1">Contacts</a>
             </li>
+            <?php if(Application::$app->user->hasRole("Admin") || Application::$app->user->isSuperAdmin): ?>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Role->value ? 'active' : ''?>" href="/admin?tab=roles&page=1">Roles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?=$tab == Tab::Permission->value ? 'active' : ''?>" href="/admin?tab=permissions&page=1">Permissions</a>
+            </li>
+            <?php endif ?>
         </ul>
     </div>
     <div class="card-body">
@@ -95,7 +102,9 @@ enum Tab: string
                                     <td><?=$question["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/questions/<?=$question["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteQuestion<?=$question["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
+                                        <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_QUESTION) || Application::$app->user->isSuperAdmin): ?>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteQuestion<?=$question["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
+                                        <?php endif ?>
                                     </td>
                                 </tr>
                                 <div class="modal" id="deleteQuestion<?=$question["id"]?>" tabindex="-1">
@@ -110,7 +119,9 @@ enum Tab: string
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                                            <a href="/admin/questions/<?=$question["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_QUESTION) || Application::$app->user->isSuperAdmin): ?>
+                                                <a href="/admin/questions/<?=$question["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php endif ?>
                                         </div>
                                         </div>
                                     </div>
@@ -165,7 +176,9 @@ enum Tab: string
                                     <td><?=$module["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/modules/<?=$module["id"]?>/edit"><img alt="Edit" src="/images/icon/pen.svg"></a>
-                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteModule<?=$module["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
+                                        <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_MODULE) || Application::$app->user->isSuperAdmin): ?>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteModule<?=$module["id"]?>"><img alt="Trash" src="/images/icon/trash.svg"></a>
+                                        <?php endif ?>
                                     </td>
                                 </tr>
                                 <div class="modal" id="deleteModule<?=$module["id"]?>" tabindex="-1">
@@ -180,7 +193,9 @@ enum Tab: string
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                                            <a href="/admin/modules/<?=$module["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_MODULE) || Application::$app->user->isSuperAdmin): ?>
+                                                <a href="/admin/modules/<?=$module["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php endif ?>
                                         </div>
                                         </div>
                                     </div>
@@ -194,82 +209,88 @@ enum Tab: string
                     </tbody>
                 </table>
             </div>
-                
-            <div class="table-responsive tab-pane <?=$tab == Tab::User->value ? 'active' : ''?>" id="users" role="tabpanel" aria-labelledby="users-tab">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Email Address</th>
-                            <th scope="col">Active</th>
-                            <th scope="col">SuperAdmin</th>
-                            <th scope="col">Registered At</th>
-                            <th scope="col">Logined At</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        <tr>
-                            <a role="button" class="btn btn-outline-primary" href="/admin/users/add">
-                                Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
-                            </a>
-                        </tr>
-                        <?php if($totalPageUsers > 0): ?>
+            
+            <?php if(Application::$app->user->hasRole("Admin") || Application::$app->user->hasRole("Moderator") || Application::$app->user->isSuperAdmin): ?>
+                <div class="table-responsive tab-pane <?=$tab == Tab::User->value ? 'active' : ''?>" id="users" role="tabpanel" aria-labelledby="users-tab">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <p class="mt-4">
-                                    Total users: <?=$totalUsers?> | Page:
-                                    <?php for($userPageIndex; $userPageIndex < $totalPageUsers; ++$userPageIndex): ?>
-                                        <a 
-                                            href="/admin?page=<?=$userPageIndex+1?>&tab=users" 
-                                            class="text-decoration-none <?=$currentPage == $userPageIndex+1 ? 'text-dark' : ''?>">
-                                            <?=$userPageIndex+1?>
-                                        </a>
-                                    <?php endfor ?>
-                                </p>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email Address</th>
+                                <th scope="col">Active</th>
+                                <th scope="col">SuperAdmin</th>
+                                <th scope="col">Registered At</th>
+                                <th scope="col">Logined At</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        <?php endif ?>
-                    </thead>
-                    <tbody>
-                        <?php if($users): ?>
-                            <?php foreach ($users as $user): ?>
+                            <tr>
+                                <a role="button" class="btn btn-outline-primary" href="/admin/users/add">
+                                    Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                                </a>
+                            </tr>
+                            <?php if($totalPageUsers > 0): ?>
                                 <tr>
-                                    <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["firstName"]?></a></td>
-                                    <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["lastName"]?></a></td>
-                                    <td><?=$user["emailAddress"]?></td>
-                                    <td><?=$user["isActive"] ? "Active" : "Inactive"?></td>
-                                    <td><?=$user["isSuperAdmin"] ? "Yes" : "No"?></td>
-                                    <td><?=$user["registeredAt"]?></td>
-                                    <td><?=$user["loginedAt"]?></td>
-                                    <td>
-                                        <a href="/admin/users/<?=$user["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteUser<?=$user["id"]?>"><img src="/images/icon/trash.svg"></a>
-                                    </td>
+                                    <p class="mt-4">
+                                        Total users: <?=$totalUsers?> | Page:
+                                        <?php for($userPageIndex; $userPageIndex < $totalPageUsers; ++$userPageIndex): ?>
+                                            <a 
+                                                href="/admin?page=<?=$userPageIndex+1?>&tab=users" 
+                                                class="text-decoration-none <?=$currentPage == $userPageIndex+1 ? 'text-dark' : ''?>">
+                                                <?=$userPageIndex+1?>
+                                            </a>
+                                        <?php endfor ?>
+                                    </p>
                                 </tr>
-                                <div class="modal" id="deleteUser<?=$user["id"]?>" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Delete This User!</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Do you want to delete this user?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                                            <a href="/admin/users/<?=$user["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
-                                        </div>
+                            <?php endif ?>
+                        </thead>
+                        <tbody>
+                            <?php if($users): ?>
+                                <?php foreach ($users as $user): ?>
+                                    <tr>
+                                        <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["firstName"]?></a></td>
+                                        <td><a href="/admin/users/<?=$user["id"]?>/edit"><?=$user["lastName"]?></a></td>
+                                        <td><?=$user["emailAddress"]?></td>
+                                        <td><?=$user["isActive"] ? "Active" : "Inactive"?></td>
+                                        <td><?=$user["isSuperAdmin"] ? "Yes" : "No"?></td>
+                                        <td><?=$user["registeredAt"]?></td>
+                                        <td><?=$user["loginedAt"]?></td>
+                                        <td>
+                                            <a href="/admin/users/<?=$user["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                            <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_USER) || Application::$app->user->isSuperAdmin): ?>
+                                                <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteUser<?=$user["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                            <?php endif ?>
+                                        </td>
+                                    </tr>
+                                    <div class="modal" id="deleteUser<?=$user["id"]?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete This User!</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you want to delete this user?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                                <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_USER) || Application::$app->user->isSuperAdmin): ?>
+                                                    <a href="/admin/users/<?=$user["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                                <?php endif ?>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endforeach ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
-                            </td>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-            </div>
+                                <?php endforeach ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                                </td>
+                            <?php endif ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif ?>
 
             <div class="table-responsive tab-pane <?=$tab == Tab::Contact->value ? 'active' : ''?>" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
                 <table class="table table-hover">
@@ -313,7 +334,9 @@ enum Tab: string
                                     <td><?=$contact["updatedAt"]?></td>
                                     <td>
                                         <a href="/admin/contacts/<?=$contact["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
-                                        <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteContact<?=$contact["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                        <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_CONTACT) || Application::$app->user->isSuperAdmin): ?>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteContact<?=$contact["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                        <?php endif ?>
                                     </td>
                                 </tr>
                                 <div class="modal" id="deleteContact<?=$contact["id"]?>" tabindex="-1">
@@ -328,7 +351,9 @@ enum Tab: string
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                                            <a href="/admin/contacts/<?=$contact["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php if(Application::$app->user->hasPrivilege(Permissions::$DELETE_CONTACT) || Application::$app->user->isSuperAdmin): ?>
+                                                <a href="/admin/contacts/<?=$contact["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            <?php endif ?>
                                         </div>
                                         </div>
                                     </div>
@@ -342,6 +367,147 @@ enum Tab: string
                     </tbody>
                 </table>
             </div>            
+            
+            <?php if(Application::$app->user->hasRole("Admin") || Application::$app->user->isSuperAdmin): ?>
+                <div class="table-responsive tab-pane <?=$tab == Tab::Role->value ? 'active' : ''?>" id="roles" role="tabpanel" aria-labelledby="roles-tab">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created At</th>
+                                <th scope="col">Updated At</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            <tr>
+                                <a role="button" class="btn btn-outline-primary" href="/admin/roles/add">
+                                    Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                                </a>
+                            </tr>
+                            <?php if($totalPageRoles > 0): ?>
+                                <tr>
+                                    <p class="mt-4">
+                                        Total roles: <?=$totalRoles?> <?=$totalPageRoles > 0 ? "| Page:" : ""?> 
+                                        <?php for($rolePageIndex; $rolePageIndex < $totalPageRoles; ++$rolePageIndex): ?>
+                                            <a 
+                                                href="/admin?page=<?=$rolePageIndex+1?>&tab=roles" 
+                                                class="text-decoration-none <?=$currentPage == $rolePageIndex+1 ? 'text-dark' : '' ?>">
+                                                <?=$rolePageIndex+1?>
+                                            </a>
+                                        <?php endfor ?>
+                                    </p>
+                                </tr>
+                            <?php endif ?>
+                        </thead>
+                        <tbody>
+                            <?php if($roles): ?>
+                                <?php foreach ($roles as $role): ?>
+                                    <tr>
+                                        <td><a href="/admin/roles/<?=$role["id"]?>/edit"><?=$role["name"]?></a></td>
+                                        <td><?=$question["isActive"] ? "Active" : "Inactive" ?></td>
+                                        <td><?=$role["createdAt"]?></td>
+                                        <td><?=$role["updatedAt"]?></td>
+                                        <td>
+                                            <a href="/admin/roles/<?=$role["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deleteRole<?=$role["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                        </td>
+                                    </tr>
+                                    <div class="modal" id="deleteRole<?=$role["id"]?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete This Role!</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you want to delete this role?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                                <a href="/admin/roles/<?=$role["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                                </td>
+                            <?php endif ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive tab-pane <?=$tab == Tab::Permission->value ? 'active' : ''?>" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created At</th>
+                                <th scope="col">Updated At</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            <tr>
+                                <a role="button" class="btn btn-outline-primary" href="/admin/permissions/add">
+                                    Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
+                                </a>
+                            </tr>
+                            <?php if($totalPagePermissions > 0): ?>
+                                <tr>
+                                    <p class="mt-4">
+                                        Total permissions: <?=$totalPermissions?> <?=$totalPagePermissions > 0 ? "| Page:" : ""?> 
+                                        <?php for($permissionPageIndex; $permissionPageIndex < $totalPagePermissions; ++$permissionPageIndex): ?>
+                                            <a 
+                                                href="/admin?page=<?=$permissionPageIndex+1?>&tab=permissions" 
+                                                class="text-decoration-none <?=$currentPage == $permissionPageIndex+1 ? 'text-dark' : '' ?>">
+                                                <?=$permissionPageIndex+1?>
+                                            </a>
+                                        <?php endfor ?>
+                                    </p>
+                                </tr>
+                            <?php endif ?>
+                        </thead>
+                        <tbody>
+                            <?php if($permissions): ?>
+                                <?php foreach ($permissions as $permission): ?>
+                                    <tr>
+                                        <td><a href="/admin/permissions/<?=$permission["id"]?>/edit"><?=$permission["perm"]?></a></td>
+                                        <td><?=$permission["isActive"] ? "Active" : "Inactive" ?></td>
+                                        <td><?=$permission["createdAt"]?></td>
+                                        <td><?=$permission["updatedAt"]?></td>
+                                        <td>
+                                            <a href="/admin/permissions/<?=$permission["id"]?>/edit"><img src="/images/icon/pen.svg"></a>
+                                            <a href="/#" data-bs-toggle="modal" data-bs-target="#deletePermission<?=$permission["id"]?>"><img src="/images/icon/trash.svg"></a>
+                                        </td>
+                                    </tr>
+                                    <div class="modal" id="deletePermission<?=$permission["id"]?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete This Permission!</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you want to delete this permission?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                                                <a href="/admin/permissions/<?=$permission["id"]?>/delete" class="btn btn-outline-danger" role="button">Yes</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
+                                </td>
+                            <?php endif ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 </div>

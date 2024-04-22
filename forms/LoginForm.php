@@ -4,7 +4,7 @@ namespace MVC\Forms;
 
 use MVC\Core\Application;
 use MVC\Core\Model;
-use MVC\Models\User;
+use MVC\Models\PrivilegedUser;
 
 
 class LoginForm extends Model
@@ -30,7 +30,7 @@ class LoginForm extends Model
 
     public function login()
     {
-        $user = User::findOne(['emailAddress' => $this->emailAddress]);
+        $user = PrivilegedUser::findOne(["emailAddress" => $this->emailAddress]);
         if (!$user) {
             $this->addError('emailAddress', 'User does not exist with this email address');
             return false;
@@ -44,7 +44,7 @@ class LoginForm extends Model
             return false;
         }
         $user->setLoginedAt("now");
-        $updated_user = User::update($data=['loginedAt' => $user->getLoginedAt()], $where=['emailAddress' => $this->emailAddress]);
+        $updated_user = PrivilegedUser::update($data=['loginedAt' => $user->getLoginedAt()], $where=['emailAddress' => $this->emailAddress]);
         return Application::$app->login($user);
     }
 }

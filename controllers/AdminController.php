@@ -13,6 +13,9 @@ use MVC\Models\Question;
 use MVC\Models\Module;
 use MVC\Models\User;
 use MVC\Models\Contact;
+use MVC\Models\Role;
+use MVC\Models\Permission;
+use MVC\Models\PrivilegedUser;
 use MVC\Exceptions\BadRequestException;
 
 
@@ -35,6 +38,12 @@ class AdminController extends Controller
             'editContact',
             'deleteContact',
             'changePassword',
+            'addRole',
+            'editRole',
+            'deleteRole',
+            'addPermission',
+            'editPermission',
+            'deletePermission',
         ]));
         $this->registerMiddleware(new AuthorizeMiddleware([
             'index',
@@ -51,6 +60,12 @@ class AdminController extends Controller
             'editContact',
             'deleteContact',
             'changePassword',
+            'addRole',
+            'editRole',
+            'deleteRole',
+            'addPermission',
+            'editPermission',
+            'deletePermission',
         ]));
         $this->limit = 10;
         $this->layout = "admin-base";
@@ -70,7 +85,7 @@ class AdminController extends Controller
         }
         $tab = isset($_GET["tab"]) ? $_GET["tab"] : "questions";
         
-        if (!in_array($tab, ['questions', 'modules', 'users', 'contacts'])) throw new BadRequestException("Invalid tab query param!");
+        if (!in_array($tab, ['questions', 'modules', 'users', 'contacts', 'roles', 'permissions'])) throw new BadRequestException("Invalid tab query param!");
 
         $questions = Question::findAll([], $this->getLimit(), $this->getPageOffset());
         $totalQuestions = Question::countAll([]);
@@ -88,6 +103,14 @@ class AdminController extends Controller
         $totalContacts = Contact::countAll();
         $totalPageContacts = ceil($totalContacts / $this->getLimit());
 
+        $roles = Role::findAll([], $this->getLimit(), $this->getPageOffset());
+        $totalRoles = Role::countAll();
+        $totalPageRoles = ceil($totalRoles / $this->getLimit());
+
+        $permissions = Permission::findAll([], $this->getLimit(), $this->getPageOffset(), "perm ASC");
+        $totalPermissions = Permission::countAll();
+        $totalPagePermissions = ceil($totalPermissions / $this->getLimit());
+
         return $this->render($view='admin', $params=[
             "questions" => $questions,
             "totalQuestions" => $totalQuestions,
@@ -104,6 +127,14 @@ class AdminController extends Controller
             "contacts" => $contacts,
             "totalContacts" => $totalContacts,
             "totalPageContacts" => $totalPageContacts,
+
+            "roles" => $roles,
+            "totalRoles" => $totalRoles,
+            "totalPageRoles" => $totalPageRoles,
+
+            "permissions" => $permissions,
+            "totalPermissions" => $totalPermissions,
+            "totalPagePermissions" => $totalPagePermissions,
 
             "currentPage" => $this->currentPage,
             "tab" => $tab,
@@ -246,30 +277,39 @@ class AdminController extends Controller
 
     public function addUser(Request $request)
     {
-        $user = new User();
+        $user = new PrivilegedUser();
+        $roles = Role::findAll(["isActive" => Role::BOOL_TRUE], 1000, 0, "name ASC");
 
         if ($request->isPost()) {
             $data = $request->getBody();
             $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
             $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
-            $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
-            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["isActive"] = $data["isActive"] ? PrivilegedUser::BOOL_TRUE : PrivilegedUser::BOOL_FALSE;
+            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? PrivilegedUser::BOOL_TRUE : PrivilegedUser::BOOL_FALSE;
             $user->loadData($data);
             if ($user->validate() && $user->save()) {
-                Application::$app->session->setFlash('success', 'The new user was added successfully!');
-                Application::$app->response->redirect('/admin?tab=users');
+                if (!$data["role"]) {
+                    Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
+                if(PrivilegedUser::insertUserRole($user->id, $data["role"])){
+                    Application::$app->session->setFlash('success', 'The new user was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
             }
         }
 
         return $this->render('adminAddUser', [
             'model' => $user,
+            'roles' => $roles,
         ], "Add User");
     }
 
     public function editUser(Request $request)
     {
         $id = (int)$request->getRouteParam($param="id");
-        $user = EditUserModelForm::findOne(["id" => $id]);
+        $user = EditUserModelForm::getByID($id);
+        $roles = Role::findAll(["isActive" => Role::BOOL_TRUE], 1000, 0, "name ASC");
         
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
         
@@ -282,6 +322,15 @@ class AdminController extends Controller
             $user->loadData($data);
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
+                if (!$data["role"]) {
+                    EditUserModelForm::update($updateData);
+                    Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
+                if(!$user->roles[$data["role"]]) {
+                    Role::deleteUserRoles($user->id);
+                    Role::insertUserRole($user->id, $data["role"]);
+                }
                 EditUserModelForm::update($updateData);
                 Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
                 Application::$app->response->redirect('/admin?tab=users');
@@ -289,7 +338,8 @@ class AdminController extends Controller
         }
 
         return $this->render('adminEditUser', [
-            'model' => $user
+            'model' => $user,
+            'roles' => $roles,
         ], "Edit USer");
     }
 
@@ -302,6 +352,7 @@ class AdminController extends Controller
 
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found This User!");
 
+        Role::deleteUserRoles($user->id);
         $user->delete();
         Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=users');
@@ -385,6 +436,140 @@ class AdminController extends Controller
         return $this->render('adminChangeUserPassword', [
             'model' => $user
         ], "Change Password");
+    }
+
+    public function addRole(Request $request)
+    {
+        $role = new Role();
+        $permissions = Permission::findAll([], 1000, 0, "perm ASC");
+
+        if ($request->isPost()) {
+            $perms = isset($_POST["perms"]) && count($_POST["perms"]) ? $_POST["perms"] : [];
+            $data = $request->getBody();
+            $role->loadData($data);
+            if ($role->validate() && $role->save()) {
+                foreach($perms as $perm) {
+                    Role::insertRolePermission($role->id, $perm);
+                }
+                Application::$app->session->setFlash('success', 'A new role was added successfully!');
+                Application::$app->response->redirect('/admin?tab=roles');
+            }
+        }
+
+        return $this->render('adminAddRole', [
+            'model' => $role,
+            'permissions' => $permissions,
+        ], "Add Role");
+    }
+
+    public function editRole(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $role = Role::findOne(["id" => $id]);
+        $role = Role::getRolePerms($role);
+        $permissions = Permission::findAll(["isActive" => Permission::BOOL_TRUE], 1000, 0, "perm ASC");
+        
+        if (!$role) throw new \MVC\Exceptions\BadRequestException("Not Found Role!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $perms = isset($_POST["perms"]) && count($_POST["perms"]) ? $_POST["perms"] : [];
+            $data["isActive"] = $data["isActive"] ? Role::BOOL_TRUE : Role::BOOL_FALSE;
+            $role->loadData($data);
+            $updateData = $role->getUpdateData();
+            if ($role->validate()) {
+                Role::update($updateData);
+                foreach($role->permissionIDs as $id) {
+                    Role::deleteRolePermissions($role->id, $id);
+                }
+                foreach($perms as $perm) {
+                    Role::insertRolePermission($role->id, $perm);
+                }
+                Application::$app->session->setFlash('success', 'The '.$role->name.' role was updated successfully!');
+                Application::$app->response->redirect('/admin?tab=roles');
+            }
+        }
+
+        return $this->render('adminEditRole', [
+            'model' => $role,
+            'permissions' => $permissions,
+        ], "Edit Role");
+    }
+
+    public function deleteRole(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $role = Role::findOne(["id" => $id]);
+        $role = Role::getRolePerms($role);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$role) throw new \MVC\Exceptions\BadRequestException("Not Found This Role ID=$role->id!");
+
+        foreach($role->users as $id) {
+            Role::deleteRoleUsers($role->id);
+        }
+        foreach($role->permissionIDs as $id) {
+            Role::deleteRolePermissions($role->id, $id);
+        }
+        $role->delete();
+        Application::$app->session->setFlash('success', 'The contact ID='.$role->id.' was deleted successfully!');
+        Application::$app->response->redirect('/admin?tab=roles');
+    }
+
+    public function addPermission(Request $request)
+    {
+        $permission = new Permission();
+        
+        if ($request->isPost()) {
+            $permission->loadData($request->getBody());
+            if ($permission->validate() && $permission->save()) {
+                Application::$app->session->setFlash('success', 'A new permission was added successfully!');
+                Application::$app->response->redirect('/admin?tab=permissions');
+            }
+        }
+
+        return $this->render('adminAddPermission', [
+            'model' => $permission
+        ], "Add Permission");
+    }
+
+    public function editPermission(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $permission = Permission::findOne(["id" => $id]);
+        
+        if (!$permission) throw new \MVC\Exceptions\BadRequestException("Not Found Permission!");
+        
+        if ($request->isPost()) {
+            $data = $request->getBody();
+            $data["isActive"] = $data["isActive"] ? Permission::BOOL_TRUE : Permission::BOOL_FALSE;
+            $permission->loadData($data);
+            $updateData = $permission->getUpdateData();
+            if ($permission->validate()) {
+                Permission::update($updateData);
+                Application::$app->session->setFlash('success', 'The '.$permission->perm.' permission was updated successfully!');
+                Application::$app->response->redirect('/admin?tab=modules');
+            }
+        }
+
+        return $this->render('adminEditPermission', [
+            'model' => $permission
+        ], "Edit Permission");
+    }
+
+    public function deletePermission(Request $request)
+    {
+        $id = (int)$request->getRouteParam($param="id");
+        $permission = Permission::findOne(["id" => $id]);
+
+        if (!$request->isGet()) throw new \MVC\Exceptions\BadRequestException("Method is not allowed!");
+
+        if (!$permission) throw new \MVC\Exceptions\BadRequestException("Not Found Your Permission!");
+
+        $permission->delete();
+        Application::$app->session->setFlash('success', 'The permission ID='.$permission->id.' was deleted successfully!');
+        Application::$app->response->redirect('/admin?tab=permissions');
     }
 }
 ?>

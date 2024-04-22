@@ -43,6 +43,12 @@ $form = new Form();
         <?php echo $form->textAreaField($model, 'aboutMe') ?>
         <?php echo $form->field($model, 'password')->passwordField() ?>
         <?php echo $form->field($model, 'passwordConfirm')->passwordField() ?>
+        <select class="form-select mt-2" aria-label="Default select example" name="role">
+            <option value="">No Having Any Role</option>
+            <?php foreach($roles as $role): ?>
+                <option value="<?=$role['id']?>"><?=$role["name"]?></option>
+            <?php endforeach ?>
+        </select>
         <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
     <?php Form::end() ?>
 </section>

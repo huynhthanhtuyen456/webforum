@@ -130,7 +130,7 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public static function findAll(array $where = [], int $limit = 0, int $offset = 0)
+    public static function findAll(array $where = [], int $limit = 0, int $offset = 0, string $oderBy = '')
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
@@ -139,6 +139,8 @@ abstract class DbModel extends Model
         $fields = static::dbFields();
 
         $prepare_stm = $where ? "SELECT $fields FROM $tableName WHERE $sql" : "SELECT $fields FROM $tableName";
+        list($field, $order) = explode(' ', $oderBy);
+        $prepare_stm = !empty($oderBy) && str_contains($fields, $field) && (str_contains($order, "ASC") || str_contains($order, "DESC")) ? $prepare_stm.' ORDER BY '.$field : $prepare_stm;
 
         $prepare_stm .= $limit ? " LIMIT :limit" : "";
 
