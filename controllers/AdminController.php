@@ -15,6 +15,7 @@ use MVC\Models\User;
 use MVC\Models\Contact;
 use MVC\Models\Role;
 use MVC\Models\Permission;
+use MVC\Models\PrivilegedUser;
 use MVC\Exceptions\BadRequestException;
 
 
@@ -276,30 +277,35 @@ class AdminController extends Controller
 
     public function addUser(Request $request)
     {
-        $user = new User();
+        $user = new PrivilegedUser();
+        $roles = Role::findAll(["isActive" => Role::BOOL_TRUE], 1000, 0, "name ASC");
 
         if ($request->isPost()) {
             $data = $request->getBody();
             $data["birthday"] = $data["birthday"] ? $data["birthday"] : null;
             $data["aboutMe"] = $data["aboutMe"] ? $data["aboutMe"] : null;
-            $data["isActive"] = $data["isActive"] ? User::BOOL_TRUE : User::BOOL_FALSE;
-            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? User::BOOL_TRUE : User::BOOL_FALSE;
+            $data["isActive"] = $data["isActive"] ? PrivilegedUser::BOOL_TRUE : PrivilegedUser::BOOL_FALSE;
+            $data["isSuperAdmin"] = $data["isSuperAdmin"] ? PrivilegedUser::BOOL_TRUE : PrivilegedUser::BOOL_FALSE;
             $user->loadData($data);
             if ($user->validate() && $user->save()) {
-                Application::$app->session->setFlash('success', 'The new user was added successfully!');
-                Application::$app->response->redirect('/admin?tab=users');
+                if(PrivilegedUser::insertUserRole($user->id, $data["role"])){
+                    Application::$app->session->setFlash('success', 'The new user was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
             }
         }
 
         return $this->render('adminAddUser', [
             'model' => $user,
+            'roles' => $roles,
         ], "Add User");
     }
 
     public function editUser(Request $request)
     {
         $id = (int)$request->getRouteParam($param="id");
-        $user = EditUserModelForm::findOne(["id" => $id]);
+        $user = EditUserModelForm::getByID($id);
+        $roles = Role::findAll(["isActive" => Role::BOOL_TRUE], 1000, 0, "name ASC");
         
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found Module!");
         
@@ -312,6 +318,10 @@ class AdminController extends Controller
             $user->loadData($data);
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
+                if(!$user->roles[$data["role"]]) {
+                    Role::deleteUserRoles($user->id);
+                    Role::insertUserRole($user->id, $data["role"]);
+                }
                 EditUserModelForm::update($updateData);
                 Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
                 Application::$app->response->redirect('/admin?tab=users');
@@ -319,7 +329,8 @@ class AdminController extends Controller
         }
 
         return $this->render('adminEditUser', [
-            'model' => $user
+            'model' => $user,
+            'roles' => $roles,
         ], "Edit USer");
     }
 
@@ -332,6 +343,7 @@ class AdminController extends Controller
 
         if (!$user) throw new \MVC\Exceptions\BadRequestException("Not Found This User!");
 
+        Role::deleteUserRoles($user->id);
         $user->delete();
         Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was deleted successfully!');
         Application::$app->response->redirect('/admin?tab=users');

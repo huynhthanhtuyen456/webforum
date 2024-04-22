@@ -76,6 +76,29 @@ class Role extends TimestampModel
         return $role;
     }
 
+        // return a role object with associated permissions
+        public static function getRolePermsByRoleID($roleID) {
+            $permissionTable = Constants::$PERMISSION_TABLE;
+            $rolePermTable = Constants::$ROLE_PERMISSION_TABLE;
+            $sql = "SELECT p.perm, p.id FROM $rolePermTable as r
+                    JOIN $permissionTable as p ON r.permissionID = p.id
+                    WHERE r.roleID = :roleID";
+            $statement = self::prepare($sql);
+            $statement->bindParam(":roleID", $roleID, \PDO::PARAM_INT);
+            $statement->execute();
+            $role = new Role();
+            $permissions = [];
+            $permissionIDS = [];
+    
+            while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+                $permissions[$row["perm"]] = true;
+                $permissionIDS[] = $row["id"];
+            }
+            $role->permissions = $permissions;
+            $role->permissionIDs = $permissionIDS;
+            return $role;
+        }
+
     // return a role object with associated permissions
     public static function getRoleUsers($role) {
         $userTable = Constants::$USER_TABLE;
@@ -118,15 +141,12 @@ class Role extends TimestampModel
     }
 
     // insert array of roles for specified user id
-    public static function insertUserRoles($userID, $roles) {
-        $sql = "INSERT INTO UserRole (userID, roleID) VALUES (:userID, :roleID)";
+    public static function insertUserRole($userID, $roleID) {
+        $sql = "INSERT INTO UserRole (userID, roleID) VALUES (:userID, :roleID) ON DUPLICATE KEY UPDATE roleID = :roleID, userID = :userID";
         $statement = self::prepare($sql);
         $statement->bindParam(":userID", $userID, \PDO::PARAM_INT);
         $statement->bindParam(":roleID", $roleID, \PDO::PARAM_INT);
-        foreach ($roles as $roleID) {
-            $statement->execute();
-        }
-        return true;
+        return $statement->execute();;
     }
 
     // delete array of roles, and all associations
@@ -148,7 +168,7 @@ class Role extends TimestampModel
         $sql = "DELETE FROM UserRole WHERE userID = :userID";
         $statement = self::prepare($sql);
         $statement->bindParam(":userID", $userID, \PDO::PARAM_INT);
-        return $sth->execute();
+        return $statement->execute();
     }
 
     public static function deleteRolePermissions($roleID, $permissionID) {

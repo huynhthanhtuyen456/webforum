@@ -44,8 +44,8 @@ class PrivilegedUser extends User
         $userRoleTable = Constants::$USER_ROLE_TABLE;
         $roleTable = Constants::$ROLE_TABLE;
         $sql = "SELECT ur.roleID, r.name FROM $userRoleTable as ur
-                JOIN $roleTable as r ON ur.roleID = r.id
-                WHERE ur.id = :id";
+                JOIN $roleTable as r ON r.id = ur.roleID
+                WHERE ur.userID = :id";
         $statement = self::prepare($sql);
         $statement->bindParam(":id", $this->id, \PDO::PARAM_INT);
         $statement->execute();
@@ -53,6 +53,15 @@ class PrivilegedUser extends User
         while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $this->roles[$row["name"]] = Role::getRolePerms($row["id"]);
         }
+    }
+
+    // insert array of role for specified user id
+    public static function insertUserRole($userID, $roleID) {
+        $sql = "INSERT INTO UserRole (userID, roleID) VALUES (:userID, :roleID) ON DUPLICATE KEY UPDATE userID = :userID, roleID = :roleID";
+        $statement = self::prepare($sql);
+        $statement->bindParam(":userID", $userID, \PDO::PARAM_INT);
+        $statement->bindParam(":roleID", $roleID, \PDO::PARAM_INT);
+        return $statement->execute();
     }
 
     // check if user has a specific privilege

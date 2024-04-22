@@ -43,7 +43,7 @@ class Application
         $userId = Application::$app->session->get('user');
         if ($userId) {
             $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::getByID([$key => $userId]);
+            $this->user = $this->userClass::findOne([$key => $userId]);
         }
     }
 

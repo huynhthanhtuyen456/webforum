@@ -67,7 +67,8 @@ $user_role_table_sql = "CREATE TABLE IF NOT EXISTS ".Constants::$USER_ROLE_TABLE
     roleID INT NOT NULL,
     CONSTRAINT fkUserRole
         FOREIGN KEY(roleID) 
-        REFERENCES Role(id) ON DELETE CASCADE
+        REFERENCES Role(id) ON DELETE CASCADE,
+    UNIQUE KEY `user_role_id` (`roleID`,`userID`)
     );
 ";
 array_push($sql_statements, $user_role_table_sql);
