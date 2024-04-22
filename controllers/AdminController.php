@@ -111,6 +111,10 @@ class AdminController extends Controller
             "totalUsers" => $totalUsers,
             "totalPageUsers" => $totalPageUsers,
 
+            "contacts" => $contacts,
+            "totalContacts" => $totalContacts,
+            "totalPageContacts" => $totalPageContacts,
+
             "roles" => $roles,
             "totalRoles" => $totalRoles,
             "totalPageRoles" => $totalPageRoles,
