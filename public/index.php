@@ -10,6 +10,7 @@ use MVC\Controllers\UserController;
 use MVC\Controllers\RegisterController;
 use MVC\Controllers\AuthController;
 use MVC\Controllers\ProfileController;
+use MVC\Controllers\SearchQuestionsController;
 use MVC\Models\User;
 use MVC\Core\Application;
 use MVC\Core\DotEnv;
@@ -45,6 +46,7 @@ $app->router->post("ask-questions", [QuestionController::class, 'post']);
 
 $app->router->get("question/{id}", [QuestionController::class, 'detail']);
 $app->router->post("question/answers/add", [QuestionController::class, 'addAnswer']);
+$app->router->get("questions/search", [SearchQuestionsController::class, 'search']);
 
 $app->router->get("question/{id}/edit", [QuestionController::class, 'update']);
 $app->router->post("question/{id}/edit", [QuestionController::class, 'update']);

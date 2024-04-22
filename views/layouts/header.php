@@ -46,8 +46,8 @@ if (!$isGuest) {
                                 <a class="nav-link" href="/register">Register</a>
                             </li>
                             <li class="d-block d-sm-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -60,8 +60,8 @@ if (!$isGuest) {
                                 <a class="nav-link" href="/register">Register</a>
                             </li>
                             <li class="d-none d-sm-block d-md-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -74,8 +74,8 @@ if (!$isGuest) {
                                 <a class="nav-link" href="/register">Register</a>
                             </li>
                             <li class="d-none d-md-block d-lg-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -88,8 +88,8 @@ if (!$isGuest) {
                                 <a class="nav-link" href="/register">Register</a>
                             </li>
                             <li class="d-none d-lg-block d-xl-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -102,8 +102,8 @@ if (!$isGuest) {
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
                             <li class="d-block d-sm-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -116,8 +116,8 @@ if (!$isGuest) {
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
                             <li class="d-none d-sm-block d-md-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -130,8 +130,8 @@ if (!$isGuest) {
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
                             <li class="d-none d-md-block d-lg-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -144,8 +144,8 @@ if (!$isGuest) {
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
                             <li class="d-none d-lg-block d-xl-none">
-                                <form class="d-flex me-2">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex me-2" action="/questions/search">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                                     <button class="btn btn-outline-light" type="submit">Search</button>
                                 </form>
                             </li>
@@ -157,30 +157,18 @@ if (!$isGuest) {
 
     <div class="col-6 col-md-4 d-none d-xl-block">
         <nav class="navbar navbar-expand-lg navbar-dark top-50 start-0 translate-middle-y">
+            <form class="d-flex me-2" action="/questions/search">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
             <?php
             if ($isGuest): ?>
-                <form class="d-flex me-2">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
                 <a class="btn btn-outline-light me-2" href="/login">Login</a>
                 <a class="btn btn-outline-light" href="/register">Register</a>
             <?php else: ?>
-                <form class="d-flex me-2">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
                 <a class="btn btn-outline-light me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
                 <a class="btn btn-outline-light me-2" href="/logout">Welcome <?php echo $userDisplayName; ?>(Logout)</a>
             <?php endif; ?>
         </nav>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script>
-    $('#navHeader a').on('click', function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    })
-</script>
