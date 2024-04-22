@@ -24,7 +24,7 @@ class SearchQuestionsController extends Controller
             }
         }
         $query = isset($_GET["query"]) ? $_GET["query"] : "";
-        $questions = Question::search($query=$query, [], $this->getLimit(), $this->getPageOffset());
+        $questions = Question::search($query=$query, ["isActive" => Question::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
         return $this->render('search', [
             "questions" => $questions
         ], "Search");

@@ -107,7 +107,7 @@ class Question extends TimestampModel
 
         $prepare_stmt = "SELECT $fields FROM $tableName WHERE `thread` LIKE :query OR `content` LIKE :query ";
 
-        $prepare_stmt = $where ? $prepare_stmt."$sql " : $prepare_stmt;
+        $prepare_stmt = $where ? $prepare_stmt."AND $sql " : $prepare_stmt;
 
         $prepare_stmt .= "ORDER BY createdAt DESC";
 
