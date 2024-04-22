@@ -39,7 +39,15 @@ class QuestionController extends Controller
                 throw new BadRequestException($e->getMessage());
             }
         }
-        $questions = Question::findAll(['isActive' => Question::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
+        $moduleID = isset($_GET["moduleID"]) ? $_GET["moduleID"] : null;
+
+        $filters = ["isActive" => Question::BOOL_TRUE];
+
+        if ($moduleID) $filters = array_merge(["moduleID" => $moduleID], $filters);
+
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
+
+        $questions = Question::getLatestQuestions($filters, $this->getLimit(), $this->getPageOffset());
         $totalQuestions = Question::countAll(["isActive" => true]);
         $totalPage = ceil($totalQuestions / $this->getLimit());
         return $this->render($view='questions', $params=[
@@ -47,6 +55,9 @@ class QuestionController extends Controller
             "totalQuestions" => $totalQuestions,
             "totalPage" => $totalPage,
             "currentPage" => $this->currentPage,
+
+            "modules" => $modules,
+            "moduleID" => $moduleID,
         ], $title="Questions");
     }
 

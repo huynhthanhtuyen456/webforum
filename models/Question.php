@@ -96,6 +96,48 @@ class Question extends TimestampModel
         }
     }
     
+    public static function getLatestQuestions(array $where = [], int $limit = 0, int $offset = 0)
+    {
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        
+        $fields = static::dbFields();
+
+        $prepare_stmt = "SELECT $fields FROM $tableName WHERE ";
+
+        $prepare_stmt = $where ? $prepare_stmt."$sql " : $prepare_stmt;
+
+        $prepare_stmt .= "ORDER BY updatedAt DESC, createdAt DESC";
+
+        $prepare_stmt .= $limit ? " LIMIT :limit " : "";
+
+        $prepare_stmt .= $offset ? " OFFSET :offset " : "";
+
+        $statement = self::prepare($prepare_stmt);
+
+        foreach ($where as $key => $item) {
+            $statement->bindValue(":$key", $item);
+        }
+
+        if ($limit) {
+            $statement->bindParam(":limit", $limit, \PDO::PARAM_INT);
+        }
+
+        if ($offset) {
+            $statement->bindValue(":offset", $offset, \PDO::PARAM_INT);
+        }
+
+        try {
+            $statement->execute();            
+        } catch (\PDOException $e) {
+            throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());
+        }
+
+        return $statement->fetchAll();
+    }
+
     public static function search(string $query = "", array $where = [], int $limit = 0, int $offset = 0)
     {
         $tableName = static::tableName();

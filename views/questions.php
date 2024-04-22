@@ -3,9 +3,31 @@
         <h2>Questions - Total Questions: <?php echo $totalQuestions ?></h2>
     </div>
 
+    <form class="me-2">
+        <div class="row mt-2">
+            <div class="col-4">
+                <select 
+                    class="form-select" 
+                    class="form-select" 
+                    aria-label="Default select example" 
+                    name="moduleID"
+                    onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);"
+                >
+                    <option value="/questions" <?=$moduleID ? 'selected' : ''?> selected>All Modules</option>
+                    <?php foreach($modules as $module): ?>
+                        <option value="/questions?moduleID=<?=$module['id']?>" <?=$moduleID == $module['id'] ? 'selected' : ''?>><?=$module['name']?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </form>
+
     <div class="row m-4">
-            <?php 
-                use MVC\Models\User;
+        <?php 
+            use MVC\Models\User;
+            if($questions): 
+        ?>
+            <?php
                 foreach($questions as $item):
                     $nextItem = next($item) ? $questions[next($item)] : null;
             ?>
@@ -58,10 +80,15 @@
                     </div>
                 <?php endif ?>          
             <?php endforeach ?>
-        <div class="container">
-            <?php for($i; $i < $totalPage; ++$i): ?>
-                <a href="/questions?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-            <?php endfor ?>
-        </div>
+        <?php else: ?>
+            <div class="col-6">No Data Available.</div>
+        <?php endif ?>
+        <?php if($totalPage > 1): ?>
+            <div class="container">
+                <?php for($i; $i < $totalPage; ++$i): ?>
+                    <a href="/questions?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+                <?php endfor ?>
+            </div>
+        <?php endif ?>
     </div>
 </div>

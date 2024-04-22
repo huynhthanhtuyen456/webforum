@@ -87,11 +87,13 @@ if ($user) {
             </div>
         </div>
     <?php endif ?>
-    <div class="container">
-        <?php for($i; $i < $totalLastestAnswersPage; ++$i): ?>
-            <a href="/question/<?=$model->id?>?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-        <?php endfor ?>
-    </div>
+    <?php if($totalLastestAnswersPage > 1): ?>
+        <div class="container">
+            <?php for($i; $i < $totalLastestAnswersPage; ++$i): ?>
+                <a href="/question/<?=$model->id?>?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+            <?php endfor ?>
+        </div>
+    <?php endif ?>
     <div class="modal" id="staticBackdrop" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
