@@ -39,6 +39,8 @@ class SearchQuestionsController extends Controller
         return $this->render('search', [
             "questions" => $questions,
             "modules" => $modules,
+            "query" => $query,
+            "moduleID" => $moduleID,
         ], "Search");
     }
 }

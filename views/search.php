@@ -5,7 +5,7 @@
     <form class="me-2">
         <div class="row">
             <div class="col-8">
-                <input class="form-control" type="search" placeholder="Search" name="query" aria-label="Search">
+                <input class="form-control" type="search" placeholder="Search" value="<?=$query?>" name="query" aria-label="Search">
             </div>
             <div class="col-4">
                 <button class="btn btn-outline-dark" type="submit">Search</button>
@@ -14,9 +14,9 @@
         <div class="row mt-2">
             <div class="col-4">
                 <select class="form-select" class="form-select" aria-label="Default select example" name="moduleID">
-                    <option value="" selected>Select A Module</option>
+                    <option value="" <?=$moduleID ? 'selected' : ''?> selected>All Modules</option>
                     <?php foreach($modules as $module): ?>
-                        <option value="<?=$module['id']?>"><?=$module['name']?></option>
+                        <option value="<?=$module['id']?>" <?=$moduleID == $module['id'] ? 'selected' : ''?>><?=$module['name']?></option>
                     <?php endforeach ?>
                 </select>
             </div>
