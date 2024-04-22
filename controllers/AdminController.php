@@ -288,6 +288,10 @@ class AdminController extends Controller
             $data["isSuperAdmin"] = $data["isSuperAdmin"] ? PrivilegedUser::BOOL_TRUE : PrivilegedUser::BOOL_FALSE;
             $user->loadData($data);
             if ($user->validate() && $user->save()) {
+                if (!$data["role"]) {
+                    Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
                 if(PrivilegedUser::insertUserRole($user->id, $data["role"])){
                     Application::$app->session->setFlash('success', 'The new user was added successfully!');
                     Application::$app->response->redirect('/admin?tab=users');
@@ -318,6 +322,11 @@ class AdminController extends Controller
             $user->loadData($data);
             $updateData = $user->getUpdateData();
             if ($user->validate()) {
+                if (!$data["role"]) {
+                    EditUserModelForm::update($updateData);
+                    Application::$app->session->setFlash('success', 'The user ID='.$user->id.' was added successfully!');
+                    Application::$app->response->redirect('/admin?tab=users');
+                }
                 if(!$user->roles[$data["role"]]) {
                     Role::deleteUserRoles($user->id);
                     Role::insertUserRole($user->id, $data["role"]);

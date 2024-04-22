@@ -44,7 +44,7 @@ $form = new Form();
         <?php echo $form->field($model, 'password')->passwordField() ?>
         <?php echo $form->field($model, 'passwordConfirm')->passwordField() ?>
         <select class="form-select mt-2" aria-label="Default select example" name="role">
-            <option value="">Select a role</option>
+            <option value="">No Having Any Role</option>
             <?php foreach($roles as $role): ?>
                 <option value="<?=$role['id']?>"><?=$role["name"]?></option>
             <?php endforeach ?>

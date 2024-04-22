@@ -48,7 +48,7 @@ $form = new Form();
             </div>
         </div>
         <select class="form-select" aria-label="Default select example" name="role">
-            <option value="">Select a role</option>
+            <option value="">No Having Any Role</option>
             <?php foreach($roles as $role): ?>
                 <option value="<?=$role['id']?>" <?php echo isset($model->roles[$role["name"]]) ? "selected" : ""?> ><?=$role["name"]?></option>
             <?php endforeach ?>
