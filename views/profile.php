@@ -86,7 +86,7 @@ enum Tab: string
             <div class="tab-pane <?=$tab == Tab::Questions->value ? 'active' : ''?>" id="questions" role="tabpanel" aria-labelledby="questions-tab">
                 <?php 
                     use MVC\Models\User;
-                    if($totalQuestions > 1): 
+                    if(isset($totalQuestions) && $totalQuestions > 0): 
                 ?>
                     <div class="row">
                         <h2>Questions - Total Questions: <?php echo $totalQuestions ?></h2>
