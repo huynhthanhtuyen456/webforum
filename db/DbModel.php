@@ -133,13 +133,16 @@ abstract class DbModel extends Model
     public static function findAll(array $where = [], int $limit = 0, int $offset = 0, string $oderBy = '')
     {
         $tableName = static::tableName();
-        $attributes = array_keys($where);
-        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        
+        if($where) {
+            $attributes = array_keys($where);
+            $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        }
         
         $fields = static::dbFields();
 
         $prepare_stm = $where ? "SELECT $fields FROM $tableName WHERE $sql" : "SELECT $fields FROM $tableName";
-        list($field, $order) = explode(' ', $oderBy);
+        list($field, $order) = $oderBy ? explode(' ', $oderBy) : '';
         $prepare_stm = !empty($oderBy) && str_contains($fields, $field) && (str_contains($order, "ASC") || str_contains($order, "DESC")) ? $prepare_stm.' ORDER BY '.$field : $prepare_stm;
 
         $prepare_stm .= $limit ? " LIMIT :limit" : "";
