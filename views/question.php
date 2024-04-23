@@ -60,45 +60,47 @@ if ($user) {
         </div>
     <?php endif ?>
 
-    <?php if($totalLastestAnswers): ?>
+    <?php if(isset($totalLastestAnswers)): ?>
         <div class="row" id="answers">
             <h3>Total Answers: <?=$totalLastestAnswers?></h3>
             <div class="list-group">
-                <?php foreach($latestAnswers as $item): ?>
-                    <?php
-                        $date1 = new \DateTime($item["createdAt"]);
-                        $date2 = new \DateTime('now');
-                        $intervalCreatedDay = $date2->diff($date1);
-                        $intervalCreatedDay = $intervalCreatedDay->days;
-                        if ($intervalCreatedDay < 1) {
-                            $intervalCreatedDay = $item["createdAt"];
-                        } else {
-                            $intervalCreatedDay = $intervalCreatedDay == 1 ? $intervalCreatedDay." day" : $intervalCreatedDay." days";
-                        }
-                    ?>
+                <?php if(isset($latestAnswers)): ?>
+                    <?php foreach($latestAnswers as $item): ?>
+                        <?php
+                            $date1 = new \DateTime($item["createdAt"]);
+                            $date2 = new \DateTime('now');
+                            $intervalCreatedDay = $date2->diff($date1);
+                            $intervalCreatedDay = $intervalCreatedDay->days;
+                            if ($intervalCreatedDay < 1) {
+                                $intervalCreatedDay = $item["createdAt"];
+                            } else {
+                                $intervalCreatedDay = $intervalCreatedDay == 1 ? $intervalCreatedDay." day" : $intervalCreatedDay." days";
+                            }
+                        ?>
 
-                    <div class="list-group-item list-group-item-action" aria-current="true">
-                        <div class="d-flex w-100 justify-content-between">
-                            <p class="fw-bolder mb-1 text-break">
-                                <?php $authorAnswer = User::findOne(['id' => $item["authorID"]]); ?>
-                                <?=$authorAnswer->getDisplayName();?>  
-                                <?php if($user && $user->id == $authorAnswer->id): ?>
-                                    <a href="/profile/answers/<?=$item["id"]?>/edit">
-                                        <img src="/images/icon/pen.svg">
-                                    </a>
-                                <?php endif ?>
-                            </p>
-                            <small><?=$intervalCreatedDay?></small>
+                        <div class="list-group-item list-group-item-action" aria-current="true">
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="fw-bolder mb-1 text-break">
+                                    <?php $authorAnswer = User::findOne(['id' => $item["authorID"]]); ?>
+                                    <?=$authorAnswer->getDisplayName();?>  
+                                    <?php if($user && $user->id == $authorAnswer->id): ?>
+                                        <a href="/profile/answers/<?=$item["id"]?>/edit">
+                                            <img src="/images/icon/pen.svg">
+                                        </a>
+                                    <?php endif ?>
+                                </p>
+                                <small><?=$intervalCreatedDay?></small>
+                            </div>
+                            <p class="mb-1 text-break fst-italic"><?=$item["answer"]?></p>
                         </div>
-                        <p class="mb-1 text-break fst-italic"><?=$item["answer"]?></p>
-                    </div>
-                <?php endforeach ?>
+                    <?php endforeach ?>
+                <?php endif ?>
             </div>
         </div>
     <?php endif ?>
     <?php if($totalLastestAnswersPage > 1): ?>
         <div class="container">
-            <?php for($i; $i < $totalLastestAnswersPage; ++$i): ?>
+            <?php for($i = 0; $i < $totalLastestAnswersPage; ++$i): ?>
                 <a href="/question/<?=$model->id?>?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
             <?php endfor ?>
         </div>

@@ -25,11 +25,11 @@
     <div class="row m-4">
         <?php 
             use MVC\Models\User;
-            if($questions): 
+            if(isset($questions)): 
         ?>
             <?php
                 foreach($questions as $item):
-                    $nextItem = next($item) ? $questions[next($item)] : null;
+                    $nextItem = next($item) && isset($questions[next($item)]) ? $questions[next($item)] : null;
             ?>
                 <div class="col-6">
                     <a href="/question/<?php echo $item["id"] ?>">
