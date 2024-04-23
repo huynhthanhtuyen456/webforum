@@ -60,7 +60,7 @@ class ProfileController extends Controller
 
         $answers = Answer::findAll(['authorID' => $this->me->id, 'isActive' => Answer::BOOL_TRUE], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
         $totalAnswers = Answer::countAll(['authorID' => $this->me->id, 'isActive' => Answer::BOOL_TRUE]);
-        $totalPageAnswers = ceil($totalContacts / $this->getLimit());
+        $totalPageAnswers = ceil($totalAnswers / $this->getLimit());
 
         return $this->render($view='profile', $params=[
             "questions" => $questions,
