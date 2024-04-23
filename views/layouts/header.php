@@ -95,8 +95,13 @@ if (!$isGuest) {
                         <?php else: ?>
                             <!-- Screen Size XS -->
                             <li class="d-block d-sm-none">
-                                <a class="nav-link me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
+                                <a class="nav-link me-2" href="/profile">Profile</a>
                             </li>
+                            <?php if($hasAdminAccess): ?>
+                                <li class="d-block d-sm-none">
+                                    <a class="nav-link me-2" href="/admin">Admin</a>
+                                </li>
+                            <?php endif ?>
                             <li class="d-block d-sm-none">
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
@@ -109,8 +114,13 @@ if (!$isGuest) {
                             
                             <!-- Screen Size SM -->
                             <li class="d-none d-sm-block d-md-none">
-                                <a class="nav-link me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
+                                <a class="nav-link me-2" href="/profile">Profile</a>
                             </li>
+                            <?php if($hasAdminAccess): ?>
+                                <li class="d-none d-sm-block d-md-none">
+                                    <a class="nav-link me-2" href="/admin">Admin</a>
+                                </li>
+                            <?php endif ?>
                             <li class="d-none d-sm-block d-md-none">
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
@@ -123,8 +133,13 @@ if (!$isGuest) {
 
                             <!-- Screen Size MD -->
                             <li class="d-none d-md-block d-lg-none">
-                                <a class="nav-link me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
+                                <a class="nav-link me-2" href="/profile">Profile</a>
                             </li>
+                            <?php if($hasAdminAccess): ?>
+                                <li class="d-none d-md-block d-lg-none">
+                                    <a class="nav-link me-2" href="/admin">Admin</a>
+                                </li>
+                            <?php endif ?>
                             <li class="d-none d-md-block d-lg-none">
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
@@ -137,8 +152,13 @@ if (!$isGuest) {
 
                             <!-- Screen Size LG -->
                             <li class="d-none d-lg-block d-xl-none">
-                                <a class="nav-link me-2" href="/<?php echo $meUrl ?>"><?php echo $meTitle ?></a>
+                                <a class="nav-link me-2" href="/profile">Profile</a>
                             </li>
+                            <?php if($hasAdminAccess): ?>
+                                <li class="d-none d-lg-block d-xl-none">
+                                    <a class="nav-link me-2" href="/admin">Admin</a>
+                                </li>
+                            <?php endif ?>
                             <li class="d-none d-lg-block d-xl-none">
                                 <a class="nav-link me-2" href="/logout">Welcome <?php echo $userDisplayName ?>(Logout)</a>
                             </li>
