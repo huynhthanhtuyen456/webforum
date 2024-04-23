@@ -114,7 +114,7 @@ class AdminController extends Controller
 
         $answers = Answer::findAll([], $this->getLimit(), $this->getPageOffset());
         $totalAnswers = Answer::countAll();
-        $totalPageAnswers = ceil($totaltotalAnswersPermissions / $this->getLimit());
+        $totalPageAnswers = ceil($totalAnswers / $this->getLimit());
 
         return $this->render($view='admin', $params=[
             "questions" => $questions,

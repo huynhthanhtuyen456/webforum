@@ -288,13 +288,13 @@ enum Tab: string
                             <th scope="col">Updated At</th>
                             <th scope="col">Actions</th>
                         </tr>
-                        <?php if($totalPageAnswers > 0): ?>
+                        <?php if($totalPageAnswers > 1): ?>
                             <tr>
                                 <p class="mt-4">
                                     Total answers: <?=$totalAnswers?> <?=$totalPageAnswers > 0 ? "| Page:" : ""?> 
                                     <?php for($answerPageIndex; $answerPageIndex < $totalPageAnswers; ++$answerPageIndex): ?>
                                         <a 
-                                            href="/admin?page=<?=$answerPageIndex+1?>&tab=answers" 
+                                            href="/profile?page=<?=$answerPageIndex+1?>&tab=answers" 
                                             class="text-decoration-none <?=$currentPage == $answerPageIndex+1 ? 'text-dark' : '' ?>">
                                             <?=$answerPageIndex+1?>
                                         </a>
@@ -337,13 +337,6 @@ enum Tab: string
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <?php if($totalPageAnswers > 1): ?>
-                                <div class="container">
-                                    <?php for($i; $i < $totalPageAnswers; ++$i):  ?>
-                                        <a href="/profile?tab=<?=Tab::Answers->value?>&page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-                                    <?php endfor ?>
-                                </div>
-                            <?php endif ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7"><p class="mt-4 text-center">No Content.</p></td>
