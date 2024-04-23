@@ -73,11 +73,11 @@
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>
-                        <?php if($totalPageQuestions > 0): ?>
+                        <?php if($totalPageQuestions > 1): ?>
                             <tr>
                                 <p class="mt-4">
-                                    Total questions: <?=$totalQuestions?> | Page:
-                                    <?php for($questionPageIndex; $questionPageIndex < $totalPageQuestions; ++$questionPageIndex): ?>
+                                    Total questions: <?=$totalQuestions?> <?=$totalPageQuestions > 1 ? "| Page:" : ""?> 
+                                    <?php for($questionPageIndex = 0; $questionPageIndex < $totalPageQuestions; ++$questionPageIndex): ?>
                                         <a
                                             href="/admin?page=<?=$questionPageIndex+1?>&tab=questions" 
                                             class="text-decoration-none <?=$currentPage == $questionPageIndex+1 ? 'text-dark' : ''?>">
@@ -153,11 +153,11 @@
                             <th scope="col">Updated At</th>
                             <th scope="col">Actions</th>
                         </tr>
-                        <?php if($totalPageAnswers > 0): ?>
+                        <?php if($totalPageAnswers > 1): ?>
                             <tr>
                                 <p class="mt-4">
-                                    Total contacts: <?=$totalAnswers?> <?=$totalPageAnswers > 0 ? "| Page:" : ""?> 
-                                    <?php for($answerPageIndex; $answerPageIndex < $totalPageAnswers; ++$answerPageIndex): ?>
+                                    Total answers: <?=$totalAnswers?> <?=$totalPageAnswers > 1 ? "| Page:" : ""?> 
+                                    <?php for($answerPageIndex = 0; $answerPageIndex < $totalPageAnswers; ++$answerPageIndex): ?>
                                         <a 
                                             href="/admin?page=<?=$answerPageIndex+1?>&tab=answers" 
                                             class="text-decoration-none <?=$currentPage == $answerPageIndex+1 ? 'text-dark' : '' ?>">
@@ -233,11 +233,11 @@
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>
-                        <?php if($totalPageModules > 0): ?>
+                        <?php if($totalPageModules > 1): ?>
                             <tr>
                                 <p class="mt-4">
-                                    Total modules: <?=$totalModules?> | Page:
-                                    <?php for($modulePageIndex; $modulePageIndex < $totalPageModules; ++$modulePageIndex): ?>
+                                    Total modules: <?=$totalModules?> <?=$totalPageModules > 1 ? "| Page:" : ""?> 
+                                    <?php for($modulePageIndex = 0; $modulePageIndex < $totalPageModules; ++$modulePageIndex): ?>
                                         <a
                                             href="/admin?page=<?=$modulePageIndex+1?>&tab=modules" 
                                             class="text-decoration-none <?=$currentPage == $modulePageIndex+1 ? 'text-dark' : ''?>">
@@ -311,11 +311,11 @@
                                     Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                                 </a>
                             </tr>
-                            <?php if($totalPageUsers > 0): ?>
+                            <?php if($totalPageUsers > 1): ?>
                                 <tr>
                                     <p class="mt-4">
-                                        Total users: <?=$totalUsers?> | Page:
-                                        <?php for($userPageIndex; $userPageIndex < $totalPageUsers; ++$userPageIndex): ?>
+                                        Total users: <?=$totalUsers?> <?=$totalPageUsers > 1 ? "| Page:" : ""?> 
+                                        <?php for($userPageIndex = 0; $userPageIndex < $totalPageUsers; ++$userPageIndex): ?>
                                             <a 
                                                 href="/admin?page=<?=$userPageIndex+1?>&tab=users" 
                                                 class="text-decoration-none <?=$currentPage == $userPageIndex+1 ? 'text-dark' : ''?>">
@@ -390,10 +390,10 @@
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>
-                        <?php if($totalPageContacts > 0): ?>
+                        <?php if($totalPageContacts > 1): ?>
                             <tr>
                                 <p class="mt-4">
-                                    Total contacts: <?=$totalContacts?> <?=$totalPageContacts > 0 ? "| Page:" : ""?> 
+                                    Total contacts: <?=$totalContacts?> <?=$totalPageContacts > 1 ? "| Page:" : ""?> 
                                     <?php for($contactPageIndex; $contactPageIndex < $totalPageContacts; ++$contactPageIndex): ?>
                                         <a 
                                             href="/admin?page=<?=$contactPageIndex+1?>&tab=contacts" 
@@ -466,10 +466,10 @@
                                     Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                                 </a>
                             </tr>
-                            <?php if($totalPageRoles > 0): ?>
+                            <?php if($totalPageRoles > 1): ?>
                                 <tr>
                                     <p class="mt-4">
-                                        Total roles: <?=$totalRoles?> <?=$totalPageRoles > 0 ? "| Page:" : ""?> 
+                                        Total roles: <?=$totalRoles?> <?=$totalPageRoles > 1 ? "| Page:" : ""?> 
                                         <?php for($rolePageIndex; $rolePageIndex < $totalPageRoles; ++$rolePageIndex): ?>
                                             <a 
                                                 href="/admin?page=<?=$rolePageIndex+1?>&tab=roles" 
@@ -535,10 +535,10 @@
                                     Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                                 </a>
                             </tr>
-                            <?php if($totalPagePermissions > 0): ?>
+                            <?php if($totalPagePermissions > 1): ?>
                                 <tr>
                                     <p class="mt-4">
-                                        Total permissions: <?=$totalPermissions?> <?=$totalPagePermissions > 0 ? "| Page:" : ""?> 
+                                        Total permissions: <?=$totalPermissions?> <?=$totalPagePermissions > 1 ? "| Page:" : ""?> 
                                         <?php for($permissionPageIndex; $permissionPageIndex < $totalPagePermissions; ++$permissionPageIndex): ?>
                                             <a 
                                                 href="/admin?page=<?=$permissionPageIndex+1?>&tab=permissions" 

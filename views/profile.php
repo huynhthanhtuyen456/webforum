@@ -86,7 +86,7 @@ enum Tab: string
             <div class="tab-pane <?=$tab == Tab::Questions->value ? 'active' : ''?>" id="questions" role="tabpanel" aria-labelledby="questions-tab">
                 <?php 
                     use MVC\Models\User;
-                    if($totalQuestions): 
+                    if($totalQuestions > 1): 
                 ?>
                     <div class="row">
                         <h2>Questions - Total Questions: <?php echo $totalQuestions ?></h2>
@@ -95,7 +95,7 @@ enum Tab: string
                     <div class="row">
                         <?php 
                             foreach($questions as $item):
-                                $nextItem = next($item) ? $questions[next($item)] : null;
+                                $nextItem = next($item) && isset($questions[next($item)]) ? $questions[next($item)] : null;
                         ?>
                             <div class="col-6">
                                 <a href="/question/<?=$item["id"]?>">
@@ -215,10 +215,10 @@ enum Tab: string
                                 Add <img class="mb-1" alt="Add" src="/images/icon/add.svg">
                             </a>
                         </tr>
-                        <?php if($totalPageContacts > 0): ?>
+                        <?php if($totalPageContacts > 1): ?>
                             <tr>
                                 <p class="mt-4">
-                                    Total contacts: <?=$totalContacts?> <?=$totalPageContacts > 0 ? "| Page:" : ""?> 
+                                    Total contacts: <?=$totalContacts?> <?=$totalPageContacts > 1 ? "| Page:" : ""?> 
                                     <?php for($contactPageIndex; $contactPageIndex < $totalPageContacts; ++$contactPageIndex): ?>
                                         <a 
                                             href="/admin?page=<?=$contactPageIndex+1?>&tab=contacts" 

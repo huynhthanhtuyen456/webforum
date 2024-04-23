@@ -26,7 +26,7 @@
         <div class="row m-4">
             <?php
                 foreach($questions as $item):
-                    $nextItem = next($item) ? $questions[next($item)] : null;
+                    $nextItem = next($item) && isset($questions[next($item)]) ? $questions[next($item)] : null;
             ?>
                 <div class="col-6">
                     <a href="/question/<?php echo $item["id"] ?>">
@@ -79,11 +79,13 @@
                     </div>
                 <?php endif ?>          
             <?php endforeach ?>
-            <div class="container">
-                <?php for($i; $i < $totalPage; ++$i): ?>
-                    <a href="/questions/search?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
-                <?php endfor ?>
-            </div>
+            <?php if(isset($totalPage) && $totalPage > 0): ?>
+                <div class="container">
+                    <?php for($i = 0; $i < $totalPage; ++$i): ?>
+                        <a href="/questions/search?page=<?php echo $i+1 ?>" class="text-decoration-none <?php echo $currentPage == $i+1 ? 'text-dark' : '' ?>"><?php echo $i+1 ?></a>
+                    <?php endfor ?>
+                </div>
+            <?php endif ?>
         </div>        
     <?php endif ?>
 </div>
