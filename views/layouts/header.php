@@ -6,7 +6,6 @@ $isGuest = Application::isGuest();
 if (!$isGuest) {
     $userDisplayName =  Application::$app->user->getDisplayName();
     $hasAdminAccess = Application::isAdminAccess();
-    echo $hasAdminAccess;
 }
 
 ?>

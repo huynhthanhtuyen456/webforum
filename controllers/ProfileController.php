@@ -89,7 +89,6 @@ class ProfileController extends Controller
         
         if ($request->isPost()) {
             $image_path = Common::upload_file();
-            echo $image_path;
             if ($image_path) {
                 $user->image = $image_path;
             }
