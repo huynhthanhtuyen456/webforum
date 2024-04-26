@@ -3,6 +3,7 @@
 namespace MVC\Core;
 
 use MVC\Db\Database;
+use MVC\Models\User;
 
 
 class Application
@@ -25,7 +26,7 @@ class Application
     public Database $db;
     public Session $session;
     public View $view;
-    public ?UserModel $user;
+    public ?User $user;
 
     public function __construct($rootDir, $config)
     {

@@ -3,6 +3,7 @@ namespace MVC\Controllers;
 
 use MVC\Core\Controller;
 use MVC\Models\Module;
+use MVC\Exceptions\BadRequestException;
 
 
 class ModuleController extends Controller

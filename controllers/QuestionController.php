@@ -15,6 +15,7 @@ use MVC\Middlewares\AuthMiddleware;
 
 class QuestionController extends Controller
 {
+    private $model;
     public function __construct()
     {
         $this->model = new Question();

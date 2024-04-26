@@ -11,8 +11,6 @@ use MVC\Controllers\RegisterController;
 use MVC\Controllers\AuthController;
 use MVC\Controllers\ProfileController;
 use MVC\Controllers\SearchQuestionsController;
-use MVC\Models\User;
-use MVC\Models\PrivilegedUser;
 use MVC\Core\Application;
 use MVC\Core\DotEnv;
 

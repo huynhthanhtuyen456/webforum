@@ -12,6 +12,7 @@ class Field extends BaseField
     const TYPE_PASSWORD = 'password';
     const TYPE_FILE = 'file';
     const TYPE_DATE = 'date';
+    private $disabled;
 
     public function __construct(Model $model, string $attribute)
     {

@@ -8,9 +8,7 @@ use MVC\Helpers\Common;
 use MVC\Forms\EditProfileForm;
 use MVC\Forms\ChangeUserPasswordForm;
 use MVC\Middlewares\AuthMiddleware;
-use MVC\Middlewares\AuthorizeMiddleware;
 use MVC\Models\Question;
-use MVC\Models\Module;
 use MVC\Models\User;
 use MVC\Models\Contact;
 use MVC\Models\Answer;
@@ -19,6 +17,7 @@ use MVC\Exceptions\BadRequestException;
 
 class ProfileController extends Controller
 {
+    private $me;
     public function __construct()
     {;
         $this->registerMiddleware(new AuthMiddleware([

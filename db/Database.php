@@ -20,7 +20,7 @@ class Database
 			$this->pdo = new \PDO($dbDsn, $username, $password);
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			echo "Connected to the database failed!<br>";
 			die($e->getMessage());
 		}

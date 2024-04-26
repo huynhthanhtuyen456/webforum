@@ -10,6 +10,7 @@ use MVC\Models\Contact;
 
 class ContactController extends Controller
 {
+    private $model;
     public function __construct()
     {
         $this->model = new Contact();

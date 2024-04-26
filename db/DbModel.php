@@ -13,6 +13,8 @@ abstract class DbModel extends Model
     const BOOL_FALSE = 0;
     protected array $attributes = [];
     abstract public static function tableName(): string;
+    abstract public static function dbFields(): string;
+    public int $id;
 
     public static function primaryKey(): string
     {

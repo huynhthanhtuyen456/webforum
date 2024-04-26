@@ -3,9 +3,6 @@
 namespace MVC\Forms;
 
 
-use MVC\Core\Model;
-
-
 class QuestionForm extends Form
 {
     public static function begin($action, $method, $options = [])

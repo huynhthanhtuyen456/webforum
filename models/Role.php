@@ -2,7 +2,6 @@
 
 namespace MVC\Models;
 
-use MVC\Core\Application;
 use MVC\Helpers\Constants;
 
 
@@ -158,7 +157,7 @@ class Role extends TimestampModel
         $statement = self::prepare($sql);
         $statement->bindParam(":roleID", $roleID, \PDO::PARAM_INT);
         foreach ($roles as $roleID) {
-            $sth->execute();
+            $statement->execute();
         }
         return true;
     }
@@ -183,7 +182,7 @@ class Role extends TimestampModel
         $sql = "DELETE FROM UserRole WHERE roleID = :roleID";
         $statement = self::prepare($sql);
         $statement->bindParam(":roleID", $roleID, \PDO::PARAM_INT);
-        return $sth->execute();        
+        return $statement->execute();        
     }
 
     public function labels(): array
