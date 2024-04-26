@@ -108,7 +108,7 @@ class Question extends TimestampModel
 
         $prepare_stmt = $where ? $prepare_stmt."$sql " : $prepare_stmt;
 
-        $prepare_stmt .= "ORDER BY updatedAt DESC, createdAt DESC";
+        $prepare_stmt .= "ORDER BY createdAt DESC";
 
         $prepare_stmt .= $limit ? " LIMIT :limit " : "";
 
