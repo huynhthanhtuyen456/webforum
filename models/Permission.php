@@ -2,7 +2,6 @@
 
 namespace MVC\Models;
 
-use MVC\Core\Application;
 use MVC\Helpers\Constants;
 
 

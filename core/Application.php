@@ -3,6 +3,7 @@
 namespace MVC\Core;
 
 use MVC\Db\Database;
+use MVC\Models\PrivilegedUser;
 
 
 class Application
@@ -25,7 +26,7 @@ class Application
     public Database $db;
     public Session $session;
     public View $view;
-    public ?UserModel $user;
+    public ?PrivilegedUser $user;
 
     public function __construct($rootDir, $config)
     {
@@ -42,7 +43,6 @@ class Application
 
         $userId = Application::$app->session->get('user');
         if ($userId) {
-            $key = $this->userClass::primaryKey();
             $this->user = $this->userClass::getByID($userId);
         }
     }
@@ -81,13 +81,12 @@ class Application
 
     public function run()
     {
-        $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
         try {
             echo $this->router->resolve();
         } catch (\Exception $e) {
             echo $this->router->renderView('_error', [
                 'exception' => $e,
-            ], $e->title);
+            ], "Error Page");
         }
     }
 

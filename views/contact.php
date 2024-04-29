@@ -1,6 +1,7 @@
 <?php
 
 use MVC\Forms\Form;
+use MVC\Core\Application;
 
 $form = new Form();
 ?>
@@ -11,7 +12,11 @@ $form = new Form();
     <?php $form = Form::begin('', 'post') ?>
         <?php echo $form->field($model, 'subject') ?>
         <?php echo $form->textAreaField($model, 'message') ?>
-        <?php echo $form->field($model, 'emailAddress') ?>
+        <?php if (Application::isLogined()): ?>
+            <input type="hidden" name="emailAddress" value="<?=Application::$app->user->emailAddress?>" />
+        <?php else: ?>
+            <?php echo $form->field($model, 'emailAddress') ?>
+        <?php endif ?>
         <button class="btn btn-success mb-2 mt-2" type="submit">Submit</button>
     <?php Form::end() ?>
 </section>

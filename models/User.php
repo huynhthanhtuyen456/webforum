@@ -3,7 +3,6 @@
 namespace MVC\Models;
 
 
-use MVC\Core\DbModel;
 use MVC\Core\UserModel;
 use MVC\Helpers\Constants;
 
@@ -83,7 +82,7 @@ class User extends UserModel
 
     public function setBirthday($dateString) {
         // Update the Date attribute with a new value
-        $date = new \Date($dateString);
+        $date = new \DateTime($dateString);
         $this->birthday = $date->format('Y-m-d');
     }
 

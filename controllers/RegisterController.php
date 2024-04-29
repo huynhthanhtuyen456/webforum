@@ -3,7 +3,6 @@ namespace MVC\Controllers;
 
 use MVC\Core\Controller;
 use MVC\Core\Request;
-use MVC\Core\Response;
 use MVC\Core\Application;
 use MVC\Models\User;
 

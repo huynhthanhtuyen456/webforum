@@ -13,6 +13,8 @@ abstract class DbModel extends Model
     const BOOL_FALSE = 0;
     protected array $attributes = [];
     abstract public static function tableName(): string;
+    abstract public static function dbFields(): string;
+    public int $id;
 
     public static function primaryKey(): string
     {
@@ -143,7 +145,7 @@ abstract class DbModel extends Model
 
         $prepare_stm = $where ? "SELECT $fields FROM $tableName WHERE $sql" : "SELECT $fields FROM $tableName";
         list($field, $order) = $oderBy ? explode(' ', $oderBy) : '';
-        $prepare_stm = !empty($oderBy) && str_contains($fields, $field) && (str_contains($order, "ASC") || str_contains($order, "DESC")) ? $prepare_stm.' ORDER BY '.$field : $prepare_stm;
+        $prepare_stm = !empty($oderBy) && str_contains($fields, $field) && (str_contains($order, "ASC") || str_contains($order, "DESC")) ? $prepare_stm.' ORDER BY '.$oderBy : $prepare_stm;
 
         $prepare_stm .= $limit ? " LIMIT :limit" : "";
 

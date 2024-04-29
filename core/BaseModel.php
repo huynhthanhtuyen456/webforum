@@ -20,12 +20,12 @@ abstract class BaseModel extends DbModel
 
     public function setCreatedAt($dateTimeString) {
         // Update the DateTime attribute with a new value
-        $this->createdAt = new DateTime($dateTimeString);
+        $this->createdAt = new \DateTime($dateTimeString);
     }
 
     public function setUpdatedAt($dateTimeString) {
         // Update the DateTime attribute with a new value
-        $this->updatedAt = new DateTime($dateTimeString);
+        $this->updatedAt = new \DateTime($dateTimeString);
     }
 }
 

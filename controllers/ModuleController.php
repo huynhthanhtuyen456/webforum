@@ -3,6 +3,7 @@ namespace MVC\Controllers;
 
 use MVC\Core\Controller;
 use MVC\Models\Module;
+use MVC\Exceptions\BadRequestException;
 
 
 class ModuleController extends Controller
@@ -19,7 +20,7 @@ class ModuleController extends Controller
                 throw new BadRequestException($e->getMessage());
             }
         }
-        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE], $this->getLimit(), $this->getPageOffset());
+        $modules = Module::findAll(["isActive" => Module::BOOL_TRUE], $this->getLimit(), $this->getPageOffset(), "creaetdAt DESC");
         $totalModules = Module::countAll(["isActive" => Module::BOOL_TRUE]);
         $totalPage = ceil($totalModules / $this->getLimit());
         return $this->render($view='modules', $params=[

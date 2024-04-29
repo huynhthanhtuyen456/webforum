@@ -5,7 +5,6 @@ namespace MVC\Middlewares;
 
 
 use MVC\Core\Application;
-use MVC\Exceptions\ForbiddenException;
 
 
 class AuthMiddleware extends BaseMiddleware

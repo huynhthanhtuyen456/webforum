@@ -2,8 +2,6 @@
 
 namespace MVC\Forms;
 
-use MVC\Core\Model;
-
 
 class TextareaField extends BaseField
 {

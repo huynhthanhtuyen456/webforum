@@ -89,11 +89,22 @@ class Answer extends TimestampModel
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        
-        $fields = static::dbFields();
+        $sql = implode(" AND ", array_map(fn($attr) => "$tableName.$attr = :$attr", $attributes));
 
-        $prepare_stm = $where ? "SELECT $fields FROM $tableName WHERE $sql ORDER BY createdAt DESC" : "SELECT $fields FROM $tableName ORDER BY createdAt DESC";
+        $prepare_stmt = "
+            SELECT 
+                $tableName.id, $tableName.answer, $tableName.authorID, 
+                $tableName.questionID, $tableName.createdAt, $tableName.updatedAt, $tableName.isActive
+            FROM $tableName 
+            JOIN User ur ON ur.id = $tableName.authorID 
+            JOIN Question q ON q.id = $tableName.questionID 
+            WHERE 
+                q.isActive = :isActive 
+                AND ur.isActive = :isActive 
+                AND
+        ";
+
+        $prepare_stm = $where ? $prepare_stmt." $sql "."ORDER BY createdAt DESC" : $prepare_stmt." ORDER BY createdAt DESC";
 
         $prepare_stm .= $limit ? " LIMIT :limit " : "";
 
@@ -120,5 +131,40 @@ class Answer extends TimestampModel
         }
 
         return $statement->fetchAll();
+    }
+
+    public static function countLatestAnswers (array $where = []) 
+    {
+        $tableName = static::tableName();
+
+        $attributes = array_keys($where);
+        $sql = implode(" AND ", array_map(fn($attr) => "$tableName.$attr = :$attr", $attributes));
+
+        $prepare_stmt = "
+            SELECT 
+                COUNT('$tableName.id')
+            FROM $tableName 
+            JOIN User ur ON ur.id = $tableName.authorID 
+            JOIN Question q ON q.id = $tableName.questionID 
+            WHERE 
+                q.isActive = :isActive 
+                AND ur.isActive = :isActive 
+                AND
+        ";
+
+        $prepare_stm = $where ? $prepare_stmt." $sql" : $prepare_stmt;
+
+        $statement = self::prepare($prepare_stm);
+        foreach ($where as $key => $item) {
+            $statement->bindValue(":$key", $item);
+        }
+
+        try {
+            $statement->execute();            
+        } catch (\PDOException $e) {
+            throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());
+        }
+
+        return $statement->fetchColumn();
     }
 }
