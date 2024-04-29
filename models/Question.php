@@ -99,14 +99,25 @@ class Question extends TimestampModel
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
+        $sql = implode(" AND ", array_map(fn($attr) => "$tableName.$attr = :$attr", $attributes));
 
-        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        
-        $fields = static::dbFields();
-
-        $prepare_stmt = "SELECT $fields FROM $tableName WHERE ";
+        $prepare_stmt = "
+            SELECT 
+                $tableName.id, $tableName.thread, $tableName.content,
+                $tableName.authorID, $tableName.moduleID, $tableName.image,
+                $tableName.createdAt, $tableName.updatedAt, $tableName.isActive
+            FROM $tableName 
+            JOIN User ur ON ur.id = $tableName.authorID 
+            JOIN Module m ON m.id = $tableName.moduleID 
+            WHERE 
+                m.isActive = :isActive 
+                AND ur.isActive = :isActive 
+                AND
+        ";
 
         $prepare_stmt = $where ? $prepare_stmt."$sql " : $prepare_stmt;
+
+        $prepare_stmt = $prepare_stmt." ";
 
         $prepare_stmt .= "ORDER BY createdAt DESC";
 
@@ -137,20 +148,65 @@ class Question extends TimestampModel
         return $statement->fetchAll();
     }
 
+    public static function countLatestQuestions (array $where = []) 
+    {
+        $tableName = static::tableName();
+
+        $attributes = array_keys($where);
+        $sql = implode(" AND ", array_map(fn($attr) => "$tableName.$attr = :$attr", $attributes));
+
+        $prepare_stmt = "
+            SELECT 
+                COUNT('$tableName.id')
+            FROM $tableName 
+            JOIN User ur ON ur.id = $tableName.authorID 
+            JOIN Module m ON m.id = $tableName.moduleID 
+            WHERE 
+                m.isActive = :isActive 
+                AND ur.isActive = :isActive 
+                AND
+        ";
+
+        $prepare_stm = $where ? $prepare_stmt." $sql" : $prepare_stmt;
+
+        $statement = self::prepare($prepare_stm);
+        foreach ($where as $key => $item) {
+            $statement->bindValue(":$key", $item);
+        }
+
+        try {
+            $statement->execute();            
+        } catch (\PDOException $e) {
+            throw new \MVC\Exceptions\InternalServerErrorException($e->getMessage());
+        }
+
+        return $statement->fetchColumn();
+    }
+
     public static function search(string $query = "", array $where = [], int $limit = 0, int $offset = 0)
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
 
-        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        
-        $fields = static::dbFields();
+        $sql = implode(" AND ", array_map(fn($attr) => "$tableName.$attr = :$attr", $attributes));
 
-        $prepare_stmt = "SELECT $fields FROM $tableName WHERE (`thread` LIKE :query OR `content` LIKE :query) ";
+        $prepare_stmt = "
+            SELECT 
+                $tableName.id, $tableName.thread, $tableName.content,
+                $tableName.authorID, $tableName.moduleID, $tableName.image,
+                $tableName.createdAt, $tableName.updatedAt, $tableName.isActive
+            FROM $tableName 
+            JOIN User ur ON ur.id = $tableName.authorID 
+            JOIN Module m ON m.id = $tableName.moduleID 
+            WHERE 
+                (`thread` LIKE :query OR `content` LIKE :query) 
+                AND m.isActive = :isActive 
+                AND ur.isActive = :isActive
+        ";
 
-        $prepare_stmt = $where ? $prepare_stmt."AND $sql " : $prepare_stmt;
+        $prepare_stmt = $where ? $prepare_stmt." AND $sql " : $prepare_stmt;
 
-        $prepare_stmt .= "ORDER BY updatedAt DESC, createdAt DESC";
+        $prepare_stmt .= "ORDER BY createdAt DESC, updatedAt DESC";
 
         $prepare_stmt .= $limit ? " LIMIT :limit " : "";
 
@@ -171,7 +227,6 @@ class Question extends TimestampModel
         }
 
         $statement->bindValue(":query", "%$query%");
-
         try {
             $statement->execute();            
         } catch (\PDOException $e) {

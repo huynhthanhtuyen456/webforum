@@ -10,6 +10,8 @@ use MVC\Exceptions\BadRequestException;
 
 class SearchQuestionsController extends Controller
 {
+    public int $limit = 10;
+
     public function search(Request $request)
     {
         if (isset($_GET["page"])) {

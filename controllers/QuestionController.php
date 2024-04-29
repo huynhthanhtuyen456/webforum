@@ -49,7 +49,7 @@ class QuestionController extends Controller
         $modules = Module::findAll(["isActive" => Module::BOOL_TRUE]);
 
         $questions = Question::getLatestQuestions($filters, $this->getLimit(), $this->getPageOffset());
-        $totalQuestions = Question::countAll(["isActive" => true]);
+        $totalQuestions = Question::countLatestQuestions(["isActive" => Question::BOOL_TRUE]);
         $totalPage = ceil($totalQuestions / $this->getLimit());
         return $this->render($view='questions', $params=[
             "questions" => $questions,
@@ -131,9 +131,9 @@ class QuestionController extends Controller
 
         $latestAnswers = Answer::getLatestAnswers([
             "isActive" => Answer::BOOL_TRUE,
-             "questionID" => $question->id
-            ], $this->getLimit(), $this->getPageOffset());
-        $totalLastestAnswers = Answer::countAll(["isActive" => Answer::BOOL_TRUE, "questionID" => $question->id]);
+            "questionID" => $question->id
+        ], $this->getLimit(), $this->getPageOffset());
+        $totalLastestAnswers = Answer::countLatestAnswers(["isActive" => Answer::BOOL_TRUE, "questionID" => $question->id]);
         $totalLastestAnswersPage = ceil($totalLastestAnswers / $this->getLimit());
 
         return $this->render($view='question', $params=[
