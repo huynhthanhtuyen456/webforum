@@ -539,7 +539,7 @@
                                 <tr>
                                     <p class="mt-4">
                                         Total permissions: <?=$totalPermissions?> <?=$totalPagePermissions > 1 ? "| Page:" : ""?> 
-                                        <?php for($permissionPageIndex; $permissionPageIndex < $totalPagePermissions; ++$permissionPageIndex): ?>
+                                        <?php for($permissionPageIndex = 0; $permissionPageIndex < $totalPagePermissions; ++$permissionPageIndex): ?>
                                             <a 
                                                 href="/admin?page=<?=$permissionPageIndex+1?>&tab=permissions" 
                                                 class="text-decoration-none <?=$currentPage == $permissionPageIndex+1 ? 'text-dark' : '' ?>">
