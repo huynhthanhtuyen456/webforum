@@ -88,23 +88,23 @@ class AdminController extends Controller
         
         if (!in_array($tab, ['questions', 'modules', 'users', 'contacts', 'roles', 'permissions', 'answers'])) throw new BadRequestException("Invalid tab query param!");
 
-        $questions = Question::findAll([], $this->getLimit(), $this->getPageOffset());
+        $questions = Question::findAll([], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
         $totalQuestions = Question::countAll([]);
         $totalPageQuestions = ceil($totalQuestions / $this->getLimit());
 
-        $modules = Module::findAll([], $this->getLimit(), $this->getPageOffset());
+        $modules = Module::findAll([], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
         $totalModules = Module::countAll();
         $totalPageModules = ceil($totalModules / $this->getLimit());
 
-        $users = User::findAll([], $this->getLimit(), $this->getPageOffset());
+        $users = User::findAll([], $this->getLimit(), $this->getPageOffset(), "registeredAt DESC");
         $totalUsers = User::countAll([]);
         $totalPageUsers = ceil($totalUsers / $this->getLimit());
 
-        $contacts = Contact::findAll([], $this->getLimit(), $this->getPageOffset());
+        $contacts = Contact::findAll([], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
         $totalContacts = Contact::countAll();
         $totalPageContacts = ceil($totalContacts / $this->getLimit());
 
-        $roles = Role::findAll([], $this->getLimit(), $this->getPageOffset());
+        $roles = Role::findAll([], $this->getLimit(), $this->getPageOffset(), "name ASC");
         $totalRoles = Role::countAll();
         $totalPageRoles = ceil($totalRoles / $this->getLimit());
 
@@ -112,7 +112,7 @@ class AdminController extends Controller
         $totalPermissions = Permission::countAll();
         $totalPagePermissions = ceil($totalPermissions / $this->getLimit());
 
-        $answers = Answer::findAll([], $this->getLimit(), $this->getPageOffset());
+        $answers = Answer::findAll([], $this->getLimit(), $this->getPageOffset(), "createdAt DESC");
         $totalAnswers = Answer::countAll();
         $totalPageAnswers = ceil($totalAnswers / $this->getLimit());
 
