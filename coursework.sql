@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 24, 2024 at 09:04 AM
+-- Generation Time: May 01, 2024 at 08:22 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,23 +42,14 @@ CREATE TABLE `Answer` (
 --
 
 INSERT INTO `Answer` (`id`, `answer`, `createdAt`, `updatedAt`, `isActive`, `questionID`, `authorID`) VALUES
-(6, 'test', '2024-04-21 19:41:51', '2024-04-21 19:41:51', 1, 12, 5),
-(7, 'test12321312', '2024-04-21 19:44:24', '2024-04-21 19:44:24', 1, 12, 5),
-(8, 'that khong', '2024-04-21 20:09:21', '2024-04-21 20:09:21', 1, 12, 5),
-(9, 'hay qua', '2024-04-21 20:38:15', '2024-04-21 20:38:15', 1, 12, 5),
-(10, 'test', '2024-04-21 20:39:44', '2024-04-21 20:39:44', 1, 12, 5),
-(11, 'test', '2024-04-21 20:41:23', '2024-04-21 20:41:23', 1, 12, 5),
-(12, 'test', '2024-04-21 20:43:37', '2024-04-21 20:43:37', 1, 12, 5),
-(13, 'tegst', '2024-04-21 20:45:48', '2024-04-21 20:45:48', 1, 12, 5),
-(14, 'test', '2024-04-21 20:46:33', '2024-04-21 20:46:33', 1, 12, 5),
-(15, 'test notify', '2024-04-21 20:48:26', '2024-04-21 20:48:26', 1, 12, 5),
-(16, 'Dữ dị sao? Qua du', '2024-04-22 08:35:13', '2024-04-23 00:01:15', 0, 12, 3),
-(17, 'Is it necessary to do this?', '2024-04-22 08:36:41', '2024-04-23 00:01:27', 0, 14, 3),
+(17, 'Is it necessary to do this?', '2024-04-22 08:36:41', '2024-04-23 00:01:27', 1, 14, 3),
 (18, 'Threat or Thread? If it is thread, it is a wrong keyword. otherwise, threats are negative risks which affected from outside of the project.', '2024-04-22 10:11:15', '2024-04-22 10:11:15', 1, 15, 8),
 (19, 'Oh, Thanks for your answer! You saved my life. Thanks!?', '2024-04-22 10:11:58', '2024-04-23 06:43:44', 1, 15, 3),
 (20, 'How to do this?', '2024-04-22 11:29:00', '2024-04-22 11:29:00', 1, 18, 5),
 (21, 'Bạn muốn hỏi cái gì. Tui bị ngu oke', '2024-04-23 00:53:12', '2024-04-23 00:53:27', 1, 16, 17),
-(22, 'oke', '2024-04-23 19:02:35', '2024-04-23 19:02:35', 1, 18, 18);
+(22, 'oke', '2024-04-23 19:02:35', '2024-04-23 19:02:35', 1, 18, 18),
+(23, 'hello chao ban ngay moi vui ve', '2024-04-27 02:47:29', '2024-04-27 02:47:29', 1, 19, 8),
+(24, 'adsfasdfsfs', '2024-04-27 02:47:41', '2024-04-27 02:47:41', 1, 19, 8);
 
 -- --------------------------------------------------------
 
@@ -83,7 +74,11 @@ INSERT INTO `Contact` (`id`, `emailAddress`, `subject`, `message`, `createdAt`, 
 (1, 'tuyenhtgcs220307@fpt.edu.vn', 'How to apply to become an admin of the AskToLearn forum?', 'I want to become an administrator because I am curious about this site.', '2024-04-20 21:29:08', '2024-04-21 18:04:36'),
 (4, 'tuyenhtgcs220307@fpt.edu.vn', 'Who is your daddy?', 'Me.', '2024-04-21 10:26:19', '2024-04-21 10:26:19'),
 (5, 'dragonchina@gmail.com', 'I have an issue with the login page', 'I forgot password.', '2024-04-21 14:45:33', '2024-04-21 14:45:33'),
-(8, 'tuyen@vietnam-cloud.vn', 'Who is your daddy?', 'test', '2024-04-22 20:15:07', '2024-04-22 20:15:07');
+(8, 'tuyen@vietnam-cloud.vn', 'Who is your daddy?', 'test', '2024-04-22 20:15:07', '2024-04-22 20:15:07'),
+(9, 'tuyen@vietnam-cloud.vn', 'I have an issue with the login page', 'tests', '2024-04-27 02:51:08', '2024-04-27 02:51:08'),
+(10, 'tuyen@vietnam-cloud.vn', 'I have an issue with the login page', 'test', '2024-04-27 02:51:37', '2024-04-27 02:51:37'),
+(11, 'tuyen@vietnam-cloud.vn', 'Testingr', 'test', '2024-04-29 12:23:28', '2024-04-29 12:23:28'),
+(12, 'tuyen@vietnam-cloud.vm', 'Testing', 'asd', '2024-04-29 12:24:26', '2024-04-29 12:24:26');
 
 -- --------------------------------------------------------
 
@@ -107,7 +102,8 @@ INSERT INTO `Module` (`id`, `name`, `isActive`, `createdAt`, `updatedAt`) VALUES
 (1, 'Common', 1, '2024-04-20 21:14:07', '2024-04-20 21:14:07'),
 (3, 'C Programming Language', 1, '2024-04-21 18:01:43', '2024-04-21 18:01:43'),
 (4, 'Python Programming Language', 1, '2024-04-21 18:01:48', '2024-04-21 18:01:48'),
-(5, 'Professional Project Management', 1, '2024-04-21 18:01:54', '2024-04-21 18:01:54');
+(5, 'Professional Project Management', 1, '2024-04-21 18:01:54', '2024-04-21 18:01:54'),
+(6, 'Funny Meme', 1, '2024-04-26 22:43:40', '2024-04-26 22:43:40');
 
 -- --------------------------------------------------------
 
@@ -176,12 +172,12 @@ CREATE TABLE `Question` (
 --
 
 INSERT INTO `Question` (`id`, `thread`, `content`, `image`, `createdAt`, `updatedAt`, `isActive`, `authorID`, `moduleID`) VALUES
-(12, 'How to write CV for the software engineer job', 'I want to get 1 million dollars in a month.', '/uploads/LWScreenShot 2024-04-04 at 08.14.34.png', '2024-04-21 12:16:59', '2024-04-21 18:09:00', 0, 3, 4),
-(14, 'Does Python support Switch/Case clause?', 'In many programming languages, Switch/Case clause is supported well, but I didn&#39;t find any documents about this.', '/uploads/LWScreenShot 2024-04-04 at 08.14.34.png', '2024-04-21 18:48:22', '2024-04-21 18:48:22', 1, 5, 4),
-(15, 'What is thread and opportunity in the project risk? ', 'How to define them.', '/uploads/Screenshot 2024-04-03 at 15.36.21.png', '2024-04-22 10:09:16', '2024-04-22 10:09:16', 1, 3, 5),
-(16, 'Is C Programming Language difficult for newbies?', 'About C++', '', '2024-04-22 10:26:35', '2024-04-22 10:26:35', 1, 3, 1),
-(17, 'A How to create a responsive layout?', 'Can I use Bootstrap 5?', '/uploads/Screenshot 2024-04-07 at 15.44.54.png', '2024-04-22 11:13:27', '2024-04-22 11:13:27', 1, 5, 1),
-(18, 'Python Decorator', 'When to use decorator?', '/uploads/LWScreenShot 2024-04-04 at 08.14.34.png', '2024-04-22 11:14:04', '2024-04-22 11:14:04', 1, 5, 4);
+(14, 'Does Python support Switch/Case clause', 'In many programming languages, Switch/Case clause is supported well, but I didn&#39;t find any documents about this.', '/uploads/Screenshot 2024-04-28 at 14.47.28.png', '2024-04-21 18:48:22', '2024-04-28 20:52:21', 1, 5, 4),
+(15, 'What is thread and opportunity in the project risk? ', 'How to define them.', '/uploads/z5387408270138_3732f8b8677e85fa0368d1268840219e.jpg', '2024-04-22 10:09:16', '2024-04-26 22:43:19', 1, 3, 5),
+(16, 'Is C Programming Language difficult for newbies?', 'About C++', '/uploads/man.jpg', '2024-04-22 10:26:35', '2024-04-26 22:40:15', 1, 3, 1),
+(17, 'A How to create a responsive layout?', 'Can I use Bootstrap 5?', '/uploads/z5387408269766_13236c293ce8e439d235a265f02563ef.jpg', '2024-04-22 11:13:27', '2024-04-26 22:42:58', 1, 5, 1),
+(18, 'Python Decorator', 'When to use decorator?', '/uploads/man1.jpg', '2024-04-22 11:14:04', '2024-04-26 22:37:51', 1, 5, 4),
+(19, 'Tấu hề có gì vui', 'Vui lắm cười bể bụng!', '/uploads/man5.jpg', '2024-04-26 22:44:31', '2024-04-26 22:44:31', 1, 8, 6);
 
 -- --------------------------------------------------------
 
@@ -289,10 +285,10 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`id`, `firstName`, `lastName`, `emailAddress`, `password`, `isActive`, `isSuperAdmin`, `registeredAt`, `reputation`, `birthday`, `aboutMe`, `loginedAt`, `image`) VALUES
-(1, 'Tuyen', 'Admin', 'tuyen+admin@vietnam-cloud.vn', '$2y$10$6/WvvRFwjrHR60dstRdrs.L.Qh8rYYtWv4xl6s6op8l30y9Uconw6', 1, 1, '2024-04-20 21:11:22', 0, '2024-04-17', NULL, '2024-04-24 07:30:35', NULL),
-(3, 'Thanh Tuyền', 'Huỳnh', 'dragonchina@gmail.com', '$2y$10$B6pmaH1bQBTdXs4LmaEf0uEtc/vJVvlXn/Dx7S19wJbqDfYK/mbWi', 1, 0, '2024-04-20 22:35:16', 10, '1995-05-18', 'I&#39;m a Python developer. I have many years of experience in developing e-commerce websites.', '2024-04-24 07:35:27', '/uploads/LWScreenShot 2024-04-04 at 08.14.34.png'),
-(5, 'User', 'Design', 'tuyen+designer@vietnam-cloud.vn', '$2y$10$XM9YUpJvFlnOnkiT./RNF.AUEB16.pwFZGf8XnwpUXHh0kGDsE8e.', 1, 0, '2024-04-21 09:28:01', 0, '2024-04-10', NULL, '2024-04-23 14:04:35', '/uploads/Screenshot 2024-04-05 at 16.15.40.png'),
-(8, 'Tuyen', 'Huynh', 'tuyen@vietnam-cloud.vn', '$2y$10$NGf6KcC95YYLNBU/gfwBHO.IrMvLBdfh04lD9yOF7ScnC4Ml0B4I2', 1, 0, '2024-04-21 18:04:06', 2, '2024-04-05', NULL, '2024-04-24 08:38:37', '/uploads/DSCF7584.JPEG'),
+(1, 'Tuyen', 'Admin', 'tuyen+admin@vietnam-cloud.vn', '$2y$10$6/WvvRFwjrHR60dstRdrs.L.Qh8rYYtWv4xl6s6op8l30y9Uconw6', 1, 1, '2024-04-20 21:11:22', 0, '2024-04-17', NULL, '2024-04-29 12:26:17', NULL),
+(3, 'Thanh Tuyền', 'Huỳnh', 'dragonchina@gmail.com', '$2y$10$B6pmaH1bQBTdXs4LmaEf0uEtc/vJVvlXn/Dx7S19wJbqDfYK/mbWi', 1, 0, '2024-04-20 22:35:16', 10, '1995-05-18', 'I&#39;m a Python developer. I have many years of experience in developing e-commerce websites.', '2024-04-26 22:29:55', '/uploads/LWScreenShot 2024-04-04 at 08.14.34.png'),
+(5, 'User', 'Design', 'tuyen+designer@vietnam-cloud.vn', '$2y$10$XM9YUpJvFlnOnkiT./RNF.AUEB16.pwFZGf8XnwpUXHh0kGDsE8e.', 0, 0, '2024-04-21 09:28:01', 0, '2024-04-10', NULL, '2024-04-23 14:04:35', '/uploads/Screenshot 2024-04-05 at 16.15.40.png'),
+(8, 'Tuyen', 'Huynh', 'tuyen@vietnam-cloud.vn', '$2y$10$NGf6KcC95YYLNBU/gfwBHO.IrMvLBdfh04lD9yOF7ScnC4Ml0B4I2', 1, 0, '2024-04-21 18:04:06', 2, '2024-04-20', NULL, '2024-04-29 12:23:23', '/uploads/DSCF7584.JPEG'),
 (9, 'Thanh Tuyền', 'Huỳnh', 'tuyen+moderator@vietnam-cloud.vn', '$2y$10$yysQdk/0Adu7NSuAi1sJEuMTTcnykz19BL.khF3hBC7hU5BT5N2si', 1, 0, '2024-04-22 20:43:21', 0, '2024-04-24', NULL, NULL, NULL),
 (10, 'Thanh Tuyền', 'Huỳnh', 'tuyen+editor@vietnam-cloud.vn', '$2y$10$ZkB19FgTIve3PY681EhluucQrCB40quSSEbMfa3urYDTR69qiNmem', 1, 0, '2024-04-22 21:04:39', 0, '2024-04-24', 'test', '2024-04-22 22:11:53', NULL),
 (11, 'Thanh Tuyền', 'Huỳnh', 'tuyen+tester@vietnam-cloud.vn', '$2y$10$IPbfNZdb6XuOLpOXGCmefeNUQKg.MV6de5rHgWxL27xsJYRSBU2P2', 1, 0, '2024-04-22 21:53:09', 0, '2024-04-24', 'Please work for me', NULL, NULL),
@@ -320,7 +316,7 @@ CREATE TABLE `UserRole` (
 --
 
 INSERT INTO `UserRole` (`id`, `userID`, `roleID`) VALUES
-(35, 3, 9),
+(37, 3, 8),
 (2, 10, 8);
 
 --
@@ -398,19 +394,19 @@ ALTER TABLE `UserRole`
 -- AUTO_INCREMENT for table `Answer`
 --
 ALTER TABLE `Answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `Contact`
 --
 ALTER TABLE `Contact`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `Module`
 --
 ALTER TABLE `Module`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `Permission`
@@ -422,7 +418,7 @@ ALTER TABLE `Permission`
 -- AUTO_INCREMENT for table `Question`
 --
 ALTER TABLE `Question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `Role`
@@ -446,7 +442,7 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `UserRole`
 --
 ALTER TABLE `UserRole`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
